@@ -1,0 +1,99 @@
+.starBorderContainer {
+  position: relative;
+  display: inline-flex;
+  padding: 1.5px;
+  border-radius: 14px;
+  overflow: hidden;
+  text-decoration: none !important;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 20px rgba(34, 211, 238, 0.15);
+}
+
+.starBorderContainer:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 12px 36px rgba(34, 211, 238, 0.35);
+}
+
+.conicGlow {
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 280deg,
+    var(--star-color, #22d3ee) 360deg
+  );
+  animation: rotate-star var(--star-speed, 4s) linear infinite;
+  z-index: 0;
+}
+
+.conicGlowReverse {
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: conic-gradient(
+    from 180deg,
+    transparent 0deg,
+    transparent 280deg,
+    #60a5fa 360deg
+  );
+  animation: rotate-star var(--star-speed, 4s) linear infinite;
+  z-index: 0;
+}
+
+[data-theme='light'] .conicGlowReverse {
+  background: conic-gradient(
+    from 180deg,
+    transparent 0deg,
+    transparent 280deg,
+    #2563eb 360deg
+  );
+}
+
+@keyframes rotate-star {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.innerContent {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 32px;
+  border-radius: 12.5px;
+  font-size: 1rem;
+  font-weight: 600;
+  background: #0f172a;
+  color: #fff;
+  transition: all 0.3s ease;
+  width: 100%;
+  height: 100%;
+}
+
+.starBorderContainer:hover .innerContent {
+  background: rgba(15, 23, 42, 0.85);
+  color: #22d3ee;
+}
+
+[data-theme='light'] .innerContent {
+  background: #ffffff;
+  color: #0f172a;
+}
+
+[data-theme='light'] .starBorderContainer:hover .innerContent {
+  background: #f8fafc;
+  color: #0891b2;
+}

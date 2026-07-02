@@ -1,0 +1,46 @@
+.counterContainer {
+  text-align: center;
+  opacity: 0;
+  transform: translateY(15px) scale(0.95);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.valueText {
+  display: block;
+  font-size: 1.85rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #22d3ee 0%, #60a5fa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+}
+
+[data-theme='light'] .valueText {
+  background: linear-gradient(135deg, #0891b2 0%, #2563eb 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.labelText {
+  display: block;
+  font-size: 0.88rem;
+  color: var(--jgb-muted);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+@media screen and (max-width: 640px) {
+  .valueText {
+    font-size: 1.4rem;
+  }
+  .labelText {
+    font-size: 0.8rem;
+  }
+}

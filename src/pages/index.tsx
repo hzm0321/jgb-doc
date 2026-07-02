@@ -4,8 +4,17 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import Heading from '@theme/Heading';
+import BrowserOnly from '@docusaurus/BrowserOnly';
 
 import styles from './index.module.css';
+
+/* React Bits 组件导入 */
+import SpotlightCard from '../components/ReactBits/SpotlightCard';
+import ShinyText from '../components/ReactBits/ShinyText';
+import StarBorder from '../components/ReactBits/StarBorder';
+import Particles from '../components/ReactBits/Particles';
+import TiltCard from '../components/ReactBits/TiltCard';
+import AnimatedCounter from '../components/ReactBits/AnimatedCounter';
 
 /* 滚动显示组件 (Reveal Animation) */
 function Reveal({ children, delay = 0, className = '' }: { children: ReactNode, delay?: number, className?: string }) {
@@ -113,43 +122,49 @@ function StarIcon() {
   );
 }
 
-/* 特性数据 */
+/* 特性数据 — 结合 React Bits 光斑主题色彩 */
 const featureItems = [
   {
     icon: <TrendingUpIcon />,
     iconClass: styles.featureIconCyan,
     title: '实时估值',
     description: '通过基金编号实时获取单位净值、估值净值及涨跌幅，数据每秒刷新，把握每一个市场脉搏。',
+    spotlightColor: 'rgba(34, 211, 238, 0.22)',
   },
   {
     icon: <LayersIcon />,
     iconClass: styles.featureIconBlue,
     title: '重仓追踪',
     description: '自动获取基金前 10 大重仓股票，实时追踪盘中涨跌，清晰展示持仓结构与行业分布。',
+    spotlightColor: 'rgba(96, 165, 250, 0.22)',
   },
   {
     icon: <DatabaseIcon />,
     iconClass: styles.featureIconGreen,
     title: '持仓管理',
     description: '记录持有份额和成本价，自动计算持仓收益与累计收益，支持买入/卖出交易记录。',
+    spotlightColor: 'rgba(52, 211, 153, 0.22)',
   },
   {
     icon: <CloudIcon />,
     iconClass: styles.featureIconPurple,
     title: '云端同步',
     description: '通过 Supabase 云端备份，支持多设备间数据同步与冲突处理，随时随地管理你的基金。',
+    spotlightColor: 'rgba(167, 139, 250, 0.22)',
   },
   {
     icon: <SmartphoneIcon />,
     iconClass: styles.featureIconPink,
     title: '响应式设计',
     description: '完美适配 PC 与移动端，针对小屏优化文字展示、间距及交互体验，随地查看行情。',
+    spotlightColor: 'rgba(244, 114, 182, 0.22)',
   },
   {
     icon: <ShieldIcon />,
     iconClass: styles.featureIconYellow,
     title: 'Serverless 全栈架构',
     description: '结合 Next.js 与 Supabase 云原生技术，提供实时数据同步、可靠的数据库存储和更安全的云端体验。',
+    spotlightColor: 'rgba(251, 191, 36, 0.22)',
   },
 ];
 
@@ -173,20 +188,26 @@ function HeroSection() {
       <div className={styles.heroBgGlow}>
         <div className={clsx(styles.heroGlowOrb, styles.heroGlowCyan)} />
         <div className={clsx(styles.heroGlowOrb, styles.heroGlowBlue)} />
+        {/* React Bits 互动粒子背景 */}
+        <BrowserOnly>
+          {() => <Particles particleCount={65} connectionDistance={120} />}
+        </BrowserOnly>
       </div>
       <div className={styles.heroContent}>
         <Heading as="h1" className={styles.heroTitle}>
-          {siteConfig.title}
+          <ShinyText speed={4}>{siteConfig.title}</ShinyText>
         </Heading>
         <p className={styles.heroSubtitle}>
-          {siteConfig.tagline} —— 一站式基金估值、重仓追踪、持仓管理工具，让你的投资决策更从容。
+          <ShinyText speed={5}>{siteConfig.tagline}</ShinyText> —— 一站式基金估值、重仓追踪、持仓管理工具，让你的投资决策更从容。
         </p>
         <div className={styles.heroButtons}>
-          <Link
-            className={styles.heroBtnPrimary}
-            to="https://fund.cc.cd/">
+          <StarBorder
+            to="https://fund.cc.cd/"
+            color="#22d3ee"
+            speed="4s"
+            className={styles.starBtnWrapper}>
             <ExternalLinkIcon /> 在线体验
-          </Link>
+          </StarBorder>
           <Link
             className={styles.heroBtnSecondary}
             to="/docs/intro">
@@ -196,8 +217,7 @@ function HeroSection() {
         <div className={styles.statsRow}>
           {stats.map((s, i) => (
             <div key={i} className={styles.statItem}>
-              <span className={styles.statValue}>{s.value}</span>
-              <span className={styles.statLabel}>{s.label}</span>
+              <AnimatedCounter value={s.value} label={s.label} delay={i * 150} />
             </div>
           ))}
         </div>
@@ -211,28 +231,31 @@ function ScreenshotSection() {
     <section className={styles.screenshotSection}>
       <div className="container">
         <Reveal delay={200}>
-          <div className={styles.screenshotShowcase}>
-            <div className={styles.screenshotPC}>
-              <img
-                src="/img/demo/pc-demo-01.png"
-                alt="基估宝 PC 端主界面"
-                loading="lazy"
-              />
-              <img
-                src="/img/demo/pc-demo-02.png"
-                alt="基估宝 PC 端详情界面"
-                className={styles.pcImageOverlay}
-                loading="lazy"
-              />
+          {/* React Bits 3D 悬浮透视倾斜卡片 */}
+          <TiltCard maxTilt={5} glareOpacity={0.15} className={styles.tiltShowcase}>
+            <div className={styles.screenshotShowcase}>
+              <div className={styles.screenshotPC}>
+                <img
+                  src="/img/demo/pc-demo-01.png"
+                  alt="基估宝 PC 端主界面"
+                  loading="lazy"
+                />
+                <img
+                  src="/img/demo/pc-demo-02.png"
+                  alt="基估宝 PC 端详情界面"
+                  className={styles.pcImageOverlay}
+                  loading="lazy"
+                />
+              </div>
+              <div className={styles.screenshotMobile}>
+                <img
+                  src="/img/demo/mobile-demo-01.png"
+                  alt="基估宝 移动端主界面"
+                  loading="lazy"
+                />
+              </div>
             </div>
-            <div className={styles.screenshotMobile}>
-              <img
-                src="/img/demo/mobile-demo-01.png"
-                alt="基估宝 移动端主界面"
-                loading="lazy"
-              />
-            </div>
-          </div>
+          </TiltCard>
         </Reveal>
       </div>
     </section>
@@ -245,7 +268,7 @@ function FeaturesSection() {
       <div className="container">
         <Reveal>
           <Heading as="h2" className={styles.featuresSectionTitle}>
-            核心特性
+            <ShinyText speed={4}>核心特性</ShinyText>
           </Heading>
           <p className={styles.featuresSectionDesc}>
             从实时行情到持仓管理，基估宝提供完整的基金投资追踪体验
@@ -254,7 +277,11 @@ function FeaturesSection() {
         <div className={styles.featuresGrid}>
           {featureItems.map((item, idx) => (
             <Reveal key={idx} delay={idx * 100}>
-              <div className={styles.featureCard}>
+              {/* React Bits 光影跟随卡片 */}
+              <SpotlightCard
+                className={styles.featureCardCustom}
+                spotlightColor={item.spotlightColor}
+                spotlightSize={350}>
                 <div className={clsx(styles.featureIcon, item.iconClass)}>
                   {item.icon}
                 </div>
@@ -262,7 +289,7 @@ function FeaturesSection() {
                   {item.title}
                 </Heading>
                 <p className={styles.featureDesc}>{item.description}</p>
-              </div>
+              </SpotlightCard>
             </Reveal>
           ))}
         </div>
@@ -277,7 +304,7 @@ function TechStackSection() {
       <div className="container">
         <Reveal>
           <Heading as="h2" className={styles.featuresSectionTitle}>
-            技术栈
+            <ShinyText speed={5}>技术栈</ShinyText>
           </Heading>
           <p className={styles.featuresSectionDesc}>
             现代、可靠的 Serverless 全栈技术选型

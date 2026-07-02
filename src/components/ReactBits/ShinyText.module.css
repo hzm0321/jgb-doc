@@ -1,0 +1,48 @@
+.shinyText {
+  display: inline-block;
+  background: linear-gradient(
+    120deg,
+    currentColor 0%,
+    currentColor 35%,
+    #22d3ee 48%,
+    #60a5fa 52%,
+    currentColor 65%,
+    currentColor 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shine infinite linear;
+  will-change: background-position;
+}
+
+[data-theme='light'] .shinyText {
+  background: linear-gradient(
+    120deg,
+    currentColor 0%,
+    currentColor 35%,
+    #0891b2 48%,
+    #2563eb 52%,
+    currentColor 65%,
+    currentColor 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.disabled {
+  animation: none;
+  background: none;
+  -webkit-text-fill-color: initial;
+}
+
+@keyframes shine {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -150% 0;
+  }
+}
