@@ -1,30 +1,203 @@
-/**
- * Any CSS included here will be global. The classic template
- * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
+/*
+ * 基估宝 Docusaurus 主题
+ * 设计语言：玻璃拟态 (Glassmorphism) + 深海军蓝底色 + 青蓝主色
+ * 与 real-time-fund 项目保持视觉一致
+ * Typography: Inter (ui-ux-pro-max recommended for glassmorphism)
  */
 
-/* You can override the default Infima variables here. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* ==================== 暗色主题（默认） ==================== */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
+  /* Infima 主色覆盖 */
+  --ifm-color-primary: #22d3ee;
+  --ifm-color-primary-dark: #06b6d4;
+  --ifm-color-primary-darker: #0891b2;
+  --ifm-color-primary-darkest: #0e7490;
+  --ifm-color-primary-light: #67e8f9;
+  --ifm-color-primary-lighter: #a5f3fc;
+  --ifm-color-primary-lightest: #cffafe;
+
+  --ifm-background-color: #0f172a;
+  --ifm-font-color-base: #e5e7eb;
+  --ifm-font-family-base: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --ifm-heading-font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --ifm-navbar-background-color: rgba(15, 23, 42, 0.85);
+  --ifm-footer-background-color: #020617;
   --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+
+  /* 自定义变量 */
+  --jgb-bg: #0f172a;
+  --jgb-card: #111827;
+  --jgb-text: #e5e7eb;
+  --jgb-muted: #9ca3af;
+  --jgb-primary: #22d3ee;
+  --jgb-accent: #60a5fa;
+  --jgb-success: #34d399;
+  --jgb-danger: #f87171;
+  --jgb-border: #1f2937;
+  --jgb-glass-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  --jgb-glass-border: 1px solid rgba(255, 255, 255, 0.12);
+  --jgb-glass-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  --jgb-glass-blur: blur(8px);
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
-[data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+/* ==================== 亮色主题 ==================== */
+[data-theme='light'] {
+  --ifm-color-primary: #0891b2;
+  --ifm-color-primary-dark: #0e7490;
+  --ifm-color-primary-darker: #155e75;
+  --ifm-color-primary-darkest: #164e63;
+  --ifm-color-primary-light: #06b6d4;
+  --ifm-color-primary-lighter: #22d3ee;
+  --ifm-color-primary-lightest: #67e8f9;
+
+  --ifm-background-color: #f1f5f9;
+  --ifm-font-color-base: #0f172a;
+  --ifm-navbar-background-color: rgba(255, 255, 255, 0.9);
+  --ifm-footer-background-color: #0f172a;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+
+  --jgb-bg: #f1f5f9;
+  --jgb-card: #ffffff;
+  --jgb-text: #0f172a;
+  --jgb-muted: #475569;
+  --jgb-primary: #0891b2;
+  --jgb-accent: #2563eb;
+  --jgb-success: #059669;
+  --jgb-danger: #dc2626;
+  --jgb-border: #e2e8f0;
+  --jgb-glass-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.85));
+  --jgb-glass-border: 1px solid #e2e8f0;
+  --jgb-glass-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  --jgb-glass-blur: blur(12px);
+}
+
+/* ==================== 全局基础 ==================== */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--jgb-bg);
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+/* Navbar 毛玻璃效果 */
+.navbar {
+  backdrop-filter: var(--jgb-glass-blur);
+  -webkit-backdrop-filter: var(--jgb-glass-blur);
+  border-bottom: 1px solid var(--jgb-border);
+}
+
+/* Footer 暗色主题保持深色 */
+.footer--dark {
+  background: #020617;
+  border-top: 1px solid var(--jgb-border);
+}
+
+/* ==================== 环境光效（body::before） ==================== */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 140% 140% at 10% -10%,
+      rgba(96, 165, 250, 0.08) 0%,
+      rgba(96, 165, 250, 0.035) 35%,
+      rgba(96, 165, 250, 0.01) 55%,
+      transparent 72%
+    ),
+    radial-gradient(
+      ellipse 140% 140% at 90% 0%,
+      rgba(34, 211, 238, 0.07) 0%,
+      rgba(34, 211, 238, 0.03) 38%,
+      rgba(34, 211, 238, 0.008) 58%,
+      transparent 75%
+    );
+}
+
+[data-theme='light'] body::before {
+  background:
+    radial-gradient(
+      ellipse 120% 120% at 10% -10%,
+      rgba(59, 130, 246, 0.06) 0%,
+      rgba(59, 130, 246, 0.02) 40%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 120% 120% at 90% 0%,
+      rgba(8, 145, 178, 0.05) 0%,
+      rgba(8, 145, 178, 0.015) 45%,
+      transparent 70%
+    );
+}
+
+/* ==================== Hero 背景动画 ==================== */
+@keyframes hero-glow-pulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ==================== prefers-reduced-motion ==================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ==================== 卡片玻璃拟态 ==================== */
+.glass-card {
+  background: var(--jgb-glass-bg);
+  border: var(--jgb-glass-border);
+  border-radius: 16px;
+  box-shadow: var(--jgb-glass-shadow);
+  backdrop-filter: var(--jgb-glass-blur);
+  -webkit-backdrop-filter: var(--jgb-glass-blur);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme='light'] .glass-card:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* ==================== 代码块样式 ==================== */
+[data-theme='light'] pre {
+  border: 1px solid var(--jgb-border);
+}
+
+/* ==================== 亮色主题适配补充 ==================== */
+[data-theme='light'] .navbar {
+  border-bottom-color: #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme='light'] .footer--dark {
+  background: #0f172a;
 }
