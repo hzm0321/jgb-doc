@@ -32,7 +32,7 @@ function Reveal({ children, delay = 0, className = '' }: { children: ReactNode, 
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
   }, []);
-  
+
   return (
     <div ref={ref} className={clsx(styles.reveal, className)} style={{ transitionDelay: `${delay}ms` }}>
       {children}
@@ -121,6 +121,79 @@ function StarIcon() {
     </svg>
   );
 }
+
+function TerminalIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="4 17 10 11 4 5" />
+      <line x1="12" y1="19" x2="20" y2="19" />
+    </svg>
+  );
+}
+
+function BotIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 8V4H8" />
+      <rect width="16" height="12" x="4" y="8" rx="2" />
+      <path d="M2 14h2" />
+      <path d="M20 14h2" />
+      <path d="M15 13v2" />
+      <path d="M9 13v2" />
+    </svg>
+  );
+}
+
+function StethoscopeIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 4v5a8 8 0 0 0 16 0V4" />
+      <circle cx="12" cy="18" r="3" />
+      <path d="M12 15v-1" />
+    </svg>
+  );
+}
+
+function CloudSyncIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242" />
+      <path d="M12 12v9" />
+      <path d="m8 17 4 4 4-4" />
+    </svg>
+  );
+}
+
+const cliFeatureItems = [
+  {
+    icon: <TerminalIcon />,
+    iconClass: styles.featureIconCyan,
+    title: '⚡️ 极速只读行情',
+    description: '专为高频行情监控与持仓对账设计，毫秒级响应，零副作用，生产环境安全无忧。',
+    spotlightColor: 'rgba(34, 211, 238, 0.25)',
+  },
+  {
+    icon: <BotIcon />,
+    iconClass: styles.featureIconBlue,
+    title: '🤖 AI Agent 原生支持',
+    description: '独创响应信封与标准 JSON/JSONL/Text 格式输出，无缝集成 OpenClaw 与自动化管道。',
+    spotlightColor: 'rgba(96, 165, 250, 0.25)',
+  },
+  {
+    icon: <StethoscopeIcon />,
+    iconClass: styles.featureIconGreen,
+    title: '🩺 智能自检与诊断',
+    description: '内置 describe 命令树元数据自述与 doctor 全栈环境自检，一键定位网络与数据源连通性。',
+    spotlightColor: 'rgba(52, 211, 153, 0.25)',
+  },
+  {
+    icon: <CloudSyncIcon />,
+    iconClass: styles.featureIconPurple,
+    title: '🔐 跨端云数据同步',
+    description: '通过 Token 联动 Supabase 账号，与 PC/Web 端实时共享自选关注池、分组资产与交易流水。',
+    spotlightColor: 'rgba(167, 139, 250, 0.25)',
+  },
+];
 
 /* 特性数据 — 结合 React Bits 光斑主题色彩 */
 const featureItems = [
@@ -298,6 +371,97 @@ function FeaturesSection() {
   );
 }
 
+function CliSection() {
+  return (
+    <section className={styles.cliSection}>
+      <div className="container">
+        <Reveal>
+          <Heading as="h2" className={styles.featuresSectionTitle}>
+            <ShinyText speed={4}>基估宝命令行接口 (jgb-cli)</ShinyText>
+          </Heading>
+          <p className={styles.featuresSectionDesc}>
+            无需打开浏览器，在终端、Shell 脚本或 AI Agent 中毫秒级触达全网行情与个人持仓
+          </p>
+        </Reveal>
+
+        <div className={styles.cliShowcaseRow}>
+          <Reveal delay={150}>
+            <TiltCard maxTilt={6} glareOpacity={0.2} className={styles.cliTerminalTilt}>
+              <div className={styles.cliTerminal}>
+                <div className={styles.cliTerminalHeader}>
+                  <div className={styles.cliTrafficLights}>
+                    <span className={clsx(styles.cliLight, styles.cliLightRed)} />
+                    <span className={clsx(styles.cliLight, styles.cliLightYellow)} />
+                    <span className={clsx(styles.cliLight, styles.cliLightGreen)} />
+                  </div>
+                  <div className={styles.cliTerminalTitle}>zsh — jgb portfolio list — 80×24</div>
+                </div>
+                <div className={styles.cliTerminalBody}>
+                  <div>
+                    <span className={styles.cliPrompt}>~</span>
+                    <span className={styles.cliCommand}>jgb portfolio list --format table</span>
+                  </div>
+                  <div className={styles.cliOutput}>
+                    <div>账户持仓概览 (当前估算总值: ¥158,450.00 | 浮动盈亏: <span className={styles.cliOutputHighlight}>+¥12,450.00 [+8.53%]</span>)</div>
+                    <div>代码     基金名称               成本净值   最新估值   持仓市值      浮动盈亏 (率)</div>
+                    <div>─────────────────────────────────────────────────────────────────────────────</div>
+                    <div>005827   易方达蓝筹精选混合     1.1500     1.2400     ¥12,400.00    <span className={styles.cliOutputHighlight}>+¥900.00 (+7.83%)</span></div>
+                    <div>012345   半导体先锋股票 A       1.5000     1.8560     ¥92,800.00    <span className={styles.cliOutputHighlight}>+¥17,800.00 (+23.73%)</span></div>
+                  </div>
+                  <div>
+                    <span className={styles.cliPrompt}>~</span>
+                    <span className={styles.cliCommand}>jgb price 005827 --type gsz</span>
+                  </div>
+                  <div className={styles.cliOutput}>1.2400</div>
+                  <div>
+                    <span className={styles.cliPrompt}>~</span>
+                    <span className={styles.cliCommand}>jgb market --filter a-share</span>
+                    <span className={styles.cliCursor} />
+                  </div>
+                </div>
+              </div>
+            </TiltCard>
+          </Reveal>
+
+          <div className={styles.cliFeaturesGrid}>
+            {cliFeatureItems.map((item, idx) => (
+              <Reveal key={idx} delay={200 + idx * 80}>
+                <SpotlightCard
+                  className={styles.featureCardCustom}
+                  spotlightColor={item.spotlightColor}
+                  spotlightSize={300}>
+                  <div className={clsx(styles.featureIcon, item.iconClass)}>
+                    {item.icon}
+                  </div>
+                  <Heading as="h3" className={styles.featureTitle}>
+                    {item.title}
+                  </Heading>
+                  <p className={styles.featureDesc}>{item.description}</p>
+                </SpotlightCard>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+
+        <Reveal delay={400}>
+          <div className={styles.cliActionRow}>
+            <StarBorder
+              to="/docs/cli/intro"
+              color="#22d3ee"
+              speed="3.5s"
+              className={styles.starBtnWrapper}>
+              📖 浏览 CLI 手册
+            </StarBorder>
+            <div className={styles.cliInstallPill}>
+              <code>$ npm install -g @jgb/cli</code>
+            </div>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
 function TechStackSection() {
   return (
     <section className={styles.techSection}>
@@ -334,6 +498,7 @@ export default function Home(): ReactNode {
       <main>
         <ScreenshotSection />
         <FeaturesSection />
+        <CliSection />
         <TechStackSection />
       </main>
     </Layout>
