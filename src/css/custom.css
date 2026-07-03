@@ -201,3 +201,135 @@ body::before {
 [data-theme='light'] .footer--dark {
   background: #0f172a;
 }
+
+/* ==================== 文档内行内图标/徽章缩放与对齐 ==================== */
+.markdown img[src*='/img/guide/'] {
+  height: 18px !important;
+  width: auto !important;
+  vertical-align: -3px !important;
+  display: inline-block !important;
+  margin: 0 4px !important;
+  border-radius: 2px;
+}
+
+/* ==================== FAQ 常见问题手风琴组件样式 (Docusaurus) ==================== */
+details.faq-accordion {
+  background: var(--jgb-card);
+  border: 1px solid var(--jgb-border);
+  border-radius: 14px;
+  margin-bottom: 16px;
+  padding: 14px 20px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: var(--jgb-glass-blur);
+  -webkit-backdrop-filter: var(--jgb-glass-blur);
+}
+
+[data-theme='light'] details.faq-accordion {
+  background: #ffffff;
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.05);
+}
+
+details.faq-accordion:hover {
+  border-color: var(--jgb-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 32px rgba(34, 211, 238, 0.15);
+}
+
+details.faq-accordion summary {
+  font-weight: 600;
+  font-size: 1.06rem;
+  color: var(--jgb-text);
+  cursor: pointer;
+  outline: none;
+  list-style: none !important;
+  list-style-type: none !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+  user-select: none;
+}
+
+/* ==================== 全局强制清除 Docusaurus details 组件 summary::before 三角箭头 ==================== */
+/* Docusaurus 通过 CSS Module 生成 .details_xxxx > summary:before 绘制三角箭头（position:absolute + border 三角形）*/
+/* 必须用 [class*="details_"] 匹配哈希化类名，并用足够高的特殊性覆盖 */
+details.faq-accordion > summary::before,
+details.faq-accordion > summary:before,
+[class*="details_"].faq-accordion > summary::before,
+[class*="details_"].faq-accordion > summary:before,
+[class*="details_"][open].faq-accordion > summary::before,
+[class*="details_"][open].faq-accordion > summary:before,
+[class*="details_"][data-collapsed="false"].faq-accordion > summary::before,
+[class*="details_"][data-collapsed="false"].faq-accordion > summary:before {
+  display: none !important;
+  content: none !important;
+  border: none !important;
+  border-width: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  position: static !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* 同时清除浏览器原生 marker */
+details.faq-accordion summary::-webkit-details-marker {
+  display: none !important;
+}
+details.faq-accordion summary::marker {
+  display: none !important;
+  content: none !important;
+}
+
+details.faq-accordion summary::after {
+  content: '';
+  width: 20px;
+  height: 20px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2322d3ee' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-left: 16px;
+  flex-shrink: 0;
+  display: block;
+}
+
+details.faq-accordion[open] summary::after {
+  transform: rotate(-180deg);
+}
+
+details.faq-accordion .faq-content {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--jgb-border);
+  color: var(--jgb-muted);
+  line-height: 1.75;
+  font-size: 0.96rem;
+}
+
+details.faq-accordion .faq-content p {
+  margin-bottom: 0.75rem;
+}
+
+details.faq-accordion .faq-content p:last-child,
+details.faq-accordion .faq-content ul:last-child {
+  margin-bottom: 0;
+}
+
+details.faq-accordion .faq-content ul {
+  padding-left: 1.4rem;
+  margin-bottom: 0.75rem;
+}
+
+details.faq-accordion .faq-content li {
+  margin-bottom: 0.4rem;
+}
+
+details.faq-accordion[open] {
+  border-color: var(--jgb-primary);
+  background: linear-gradient(180deg, var(--jgb-card) 0%, rgba(34, 211, 238, 0.04) 100%);
+}
+
+
