@@ -11,11 +11,11 @@ const config: Config = {
     v4: true,
   },
 
-  url: 'https://fund.cc.cd',
-  baseUrl: '/',
+  url: 'https://hzm0321.github.io',
+  baseUrl: '/jgb-doc/',
 
   organizationName: 'hzm0321',
-  projectName: 'real-time-fund',
+  projectName: 'jgb-doc',
 
   onBrokenLinks: 'throw',
 
@@ -31,7 +31,7 @@ const config: Config = {
         docs: {
           sidebarPath: './sidebars.ts',
           editUrl:
-            'https://github.com/hzm0321/real-time-fund/tree/main/',
+            'https://github.com/hzm0321/jgb-doc/tree/main/',
         },
         blog: {
           showReadingTime: true,
@@ -40,7 +40,7 @@ const config: Config = {
             xslt: true,
           },
           editUrl:
-            'https://github.com/hzm0321/real-time-fund/tree/main/',
+            'https://github.com/hzm0321/jgb-doc/tree/main/',
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
           onUntruncatedBlogPosts: 'warn',
@@ -75,12 +75,12 @@ const config: Config = {
         },
         {to: '/blog', label: '博客', position: 'left'},
         {
-          href: 'https://fund.cc.cd/',
+          href: 'https://hzm0321.github.io/jgb-doc/',
           label: '在线体验',
           position: 'left',
         },
         {
-          href: 'https://github.com/hzm0321/real-time-fund',
+          href: 'https://github.com/hzm0321/jgb-doc',
           label: 'GitHub',
           position: 'right',
         },
@@ -94,7 +94,7 @@ const config: Config = {
           items: [
             {
               label: '在线体验',
-              href: 'https://fund.cc.cd/',
+              href: 'https://hzm0321.github.io/jgb-doc/',
             },
             {
               label: '使用文档',
@@ -107,11 +107,11 @@ const config: Config = {
           items: [
             {
               label: 'GitHub',
-              href: 'https://github.com/hzm0321/real-time-fund',
+              href: 'https://github.com/hzm0321/jgb-doc',
             },
             {
               label: '问题反馈',
-              href: 'https://github.com/hzm0321/real-time-fund/issues',
+              href: 'https://github.com/hzm0321/jgb-doc/issues',
             },
           ],
         },

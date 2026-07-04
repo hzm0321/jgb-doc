@@ -10,7 +10,7 @@ sidebar_label: 欢迎使用
 
 基估宝官方项目地址：[https://fund.cc.cd](https://fund.cc.cd)
 
-备用地址：[https://hzm0321.github.io/real-time-fund/](https://hzm0321.github.io/real-time-fund/)
+备用地址：[https://hzm0321.github.io/jgb-doc/](https://hzm0321.github.io/jgb-doc/)
 
 项目基础版功能开源地址：[https://github.com/hzm0321/real-time-fund](https://github.com/hzm0321/real-time-fund)
 
