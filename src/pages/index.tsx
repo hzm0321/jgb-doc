@@ -1,4 +1,4 @@
-import React, {ReactNode, useEffect, useRef} from 'react';
+import React, {ReactNode, useEffect, useRef, useState, useCallback} from 'react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
@@ -165,6 +165,23 @@ function CloudSyncIcon() {
   );
 }
 
+function CopyIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+    </svg>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  );
+}
+
 const cliFeatureItems = [
   {
     icon: <TerminalIcon />,
@@ -245,7 +262,7 @@ const featureItems = [
 /* 技术栈数据 */
 const techItems = [
   'Next.js', 'React', 'Supabase', 'Glassmorphism',
-  'PostgreSQL', 'Serverless', 'Vercel', 'Responsive',
+  'PostgreSQL', 'Serverless', 'Responsive',
 ];
 
 /* 统计数据 */
@@ -372,6 +389,70 @@ function FeaturesSection() {
   );
 }
 
+function CliInstallPill() {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = useCallback(() => {
+    navigator.clipboard.writeText('npm install -g @jgb/cli').then(() => {
+      setCopied(true);
+      setTimeout(() => {
+        setCopied(false);
+      }, 2000);
+    }).catch(() => {
+      try {
+        const input = document.createElement('input');
+        input.value = 'npm install -g @jgb/cli';
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch (err) {
+        console.error('复制失败:', err);
+      }
+    });
+  }, []);
+
+  return (
+    <div
+      className={clsx(styles.cliInstallPill, copied && styles.cliInstallPillCopied)}
+      onClick={handleCopy}
+      role="button"
+      tabIndex={0}
+      title="点击复制指令"
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleCopy();
+        }
+      }}>
+      <code>$ npm install -g @jgb/cli</code>
+      <button
+        type="button"
+        className={clsx(styles.copyIconBtn, copied && styles.copyIconBtnCopied)}
+        onClick={(e) => {
+          e.stopPropagation();
+          handleCopy();
+        }}
+        title={copied ? '已复制！' : '复制指令'}
+        aria-label={copied ? '已复制指令' : '复制指令'}>
+        <span className={clsx(styles.iconWrapper, copied ? styles.iconHidden : styles.iconVisible)}>
+          <CopyIcon />
+        </span>
+        <span className={clsx(styles.iconWrapper, copied ? styles.iconVisible : styles.iconHidden)}>
+          <CheckIcon />
+        </span>
+      </button>
+      {copied && (
+        <span className={styles.copiedTooltip}>
+          ✨ 已复制指令
+        </span>
+      )}
+    </div>
+  );
+}
+
 function CliSection() {
   return (
     <section className={styles.cliSection}>
@@ -453,9 +534,7 @@ function CliSection() {
               className={styles.starBtnWrapper}>
               📖 浏览 CLI 手册
             </StarBorder>
-            <div className={styles.cliInstallPill}>
-              <code>$ npm install -g @jgb/cli</code>
-            </div>
+            <CliInstallPill />
           </div>
         </Reveal>
       </div>
