@@ -73,7 +73,6 @@ const config: Config = {
           position: 'left',
           label: 'CLI 文档',
         },
-        {to: '/blog', label: '博客', position: 'left'},
         {
           href: 'https://fund.cc.cd/home/',
           label: '在线体验',
