@@ -5,6 +5,7 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import Heading from '@theme/Heading';
 import BrowserOnly from '@docusaurus/BrowserOnly';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 import styles from './index.module.css';
 
@@ -309,12 +310,12 @@ function ScreenshotSection() {
             <div className={styles.screenshotShowcase}>
               <div className={styles.screenshotPC}>
                 <img
-                  src="/img/demo/pc-demo-01.png"
+                  src={useBaseUrl('/img/demo/pc-demo-01.png')}
                   alt="基估宝 PC 端主界面"
                   loading="lazy"
                 />
                 <img
-                  src="/img/demo/pc-demo-02.png"
+                  src={useBaseUrl('/img/demo/pc-demo-02.png')}
                   alt="基估宝 PC 端详情界面"
                   className={styles.pcImageOverlay}
                   loading="lazy"
@@ -322,7 +323,7 @@ function ScreenshotSection() {
               </div>
               <div className={styles.screenshotMobile}>
                 <img
-                  src="/img/demo/mobile-demo-01.png"
+                  src={useBaseUrl('/img/demo/mobile-demo-01.png')}
                   alt="基估宝 移动端主界面"
                   loading="lazy"
                 />
