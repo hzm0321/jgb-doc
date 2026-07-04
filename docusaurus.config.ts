@@ -11,8 +11,8 @@ const config: Config = {
     v4: true,
   },
 
-  url: 'https://hzm0321.github.io',
-  baseUrl: '/jgb-doc/',
+  url: 'https://fund.cc.cd',
+  baseUrl: '/home/',
 
   organizationName: 'hzm0321',
   projectName: 'jgb-doc',
@@ -75,7 +75,7 @@ const config: Config = {
         },
         {to: '/blog', label: '博客', position: 'left'},
         {
-          href: 'https://hzm0321.github.io/jgb-doc/',
+          href: 'https://fund.cc.cd/home/',
           label: '在线体验',
           position: 'left',
         },
@@ -94,7 +94,7 @@ const config: Config = {
           items: [
             {
               label: '在线体验',
-              href: 'https://hzm0321.github.io/jgb-doc/',
+              href: 'https://fund.cc.cd/home/',
             },
             {
               label: '使用文档',
