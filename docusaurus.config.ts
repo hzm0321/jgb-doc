@@ -7,6 +7,27 @@ const config: Config = {
   tagline: '实时基金估值与重仓股追踪工具',
   favicon: 'img/favicon.svg',
 
+  headTags: [
+    {
+      tagName: 'script',
+      attributes: {
+        type: 'text/javascript',
+      },
+      innerHTML: `
+(function() {
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var theme = params.get('theme') || params.get('colorMode');
+    if (theme === 'dark' || theme === 'light') {
+      localStorage.setItem('theme', theme);
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+  } catch (e) {}
+})();
+`,
+    },
+  ],
+
   future: {
     v4: true,
   },
@@ -56,7 +77,7 @@ const config: Config = {
     image: 'img/demo/pc-demo-01.png',
     colorMode: {
       defaultMode: 'dark',
-      respectPrefersColorScheme: true,
+      respectPrefersColorScheme: false,
     },
     navbar: {
       title: '基估宝',
