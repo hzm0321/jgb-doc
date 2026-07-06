@@ -12,22 +12,22 @@ sidebar_label: 2. 基金查询 (fund)
 
 ## 2.1 `jgb search` —— 搜索基金
 
-### 语法 (Synopsis)
+#### 语法 (Synopsis)
 ```bash
 jgb search <keyword> [options]
 ```
 
-### 描述 (Description)
+#### 描述 (Description)
 根据输入的关键词（支持基金代码模糊匹配、名称拼音或汉字关键词），从天天基金全网公募基金名录中全文检索匹配的基金列表。
 
-### 参数与选项 (Arguments & Options)
+#### 参数与选项 (Arguments & Options)
 | 参数/选项 | 类型 | 是否必填 | 说明 |
 | :--- | :--- | :--- | :--- |
 | `<keyword>` | string | 是 | 基金代码或名称模糊匹配关键词（如 `005827`、`易方达`、`蓝筹`） |
 | `--json` | boolean | `false` | 以结构化 JSON 格式输出结果，同时禁用所有交互式 UI 动画与引导文字，适用于 jq、管道操作及程序化自动化处理 |
 | `--text` | boolean | `false` | 以纯文本格式输出结果，去除控制台颜色和特殊 UI 符号，生成结构清晰的文字摘要，专为 LLM / AI Agent 优化消费 |
 
-### 使用示例 (Examples)
+#### 使用示例 (Examples)
 ```bash
 # 按基金名称关键词搜索
 jgb search "易方达蓝筹"
@@ -39,7 +39,7 @@ jgb search 0058 --limit 3
 jgb search "沪深300" --format json
 ```
 
-### 输出格式 (Output)
+#### 输出格式 (Output)
 **默认表格输出 (`table`)**：
 ```
 🔍 正在搜索 "易方达蓝筹"...
@@ -85,15 +85,15 @@ jgb search "沪深300" --format json
 
 ## 2.2 `jgb info` —— 查询单基金实时估值与基本面综述
 
-### 语法 (Synopsis)
+#### 语法 (Synopsis)
 ```bash
 jgb info <code> [options]
 ```
 
-### 描述 (Description)
+#### 描述 (Description)
 获取指定单只基金的综合数据综述，包括最新官方单位净值、净值确认日期、昨日涨跌幅、日内实时估算净值与估算涨跌幅、估算更新时间，以及底层数据源引用。
 
-### 参数与选项 (Arguments & Options)
+#### 参数与选项 (Arguments & Options)
 | 参数/选项 | 类型 | 是否必填 | 说明                                                             |
 | :--- | :--- | :--- |:---------------------------------------------------------------|
 | `<code>` | string | 是 | 6 位有效公募基金代码（如 `005827`）                                        |
@@ -101,7 +101,7 @@ jgb info <code> [options]
 | `--json` | boolean | `false` | 以结构化 JSON 格式输出结果，同时禁用所有交互式 UI 动画与引导文字，适用于 jq、管道操作及程序化自动化处理     |
 | `--text` | boolean | `false` | 以纯文本格式输出结果，去除控制台颜色和特殊 UI 符号，生成结构清晰的文字摘要，专为 LLM / AI Agent 优化消费 |
 
-### 使用示例 (Examples)
+#### 使用示例 (Examples)
 ```bash
 # 查询基金实时估值与净值信息
 jgb info 005827
@@ -110,7 +110,7 @@ jgb info 005827
 jgb info 005827 --source 2 --text
 ```
 
-### 输出格式 (Output)
+#### 输出格式 (Output)
 **默认表格输出 (`table`)**：
 ```
 $ jgb info 005827
@@ -162,15 +162,15 @@ $ jgb info 005827
 
 ## 2.3 `jgb history` —— 历史区间净值查询
 
-### 语法 (Synopsis)
+#### 语法 (Synopsis)
 ```bash
 jgb history <code> [options]
 ```
 
-### 描述 (Description)
+#### 描述 (Description)
 获取指定基金在某一历史时间区间内的每日官方净值（单位净值、累计净值、日增长率）明细记录。
 
-### 参数与选项 (Arguments & Options)
+#### 参数与选项 (Arguments & Options)
 | 参数/选项 | 类型 | 是否必填 | 说明 |
 | :--- | :--- | :--- | :--- |
 | `<code>` | string | 是 | 6 位基金代码 |
@@ -179,13 +179,13 @@ jgb history <code> [options]
 | `--json` | boolean | `false` | 以结构化 JSON 格式输出结果，同时禁用所有交互式 UI 动画与引导文字，适用于 jq、管道操作及程序化自动化处理 |
 | `--text` | boolean | `false` | 以纯文本格式输出结果，去除控制台颜色和特殊 UI 符号，生成结构清晰的文字摘要，专为 LLM / AI Agent 优化消费 |
 
-### 使用示例 (Examples)
+#### 使用示例 (Examples)
 ```bash
 # 查询 2026 年 6 月全月净值流水
 jgb history 005827 --from 2026-06-01 --to 2026-06-30
 ```
 
-### 输出格式 (Output)
+#### 输出格式 (Output)
 **默认表格输出 (`table`)**：
 ```
 日期         单位净值    累计净值    涨跌幅
@@ -223,27 +223,27 @@ jgb history 005827 --from 2026-06-01 --to 2026-06-30
 
 ## 2.4 `jgb returns` —— 阶段涨跌幅统计
 
-### 语法 (Synopsis)
+#### 语法 (Synopsis)
 ```bash
 jgb returns <code> [options]
 ```
 
-### 描述 (Description)
+#### 描述 (Description)
 计算指定基金在近 1 周、近 1 月、近 3 月、近 6 月、今年来（YTD）、近 1 年及成立以来的各阶段区间表现百分比数据。
 
-### 参数与选项 (Arguments & Options)
+#### 参数与选项 (Arguments & Options)
 | 参数/选项 | 类型 | 是否必填 | 说明 |
 | :--- | :--- | :--- | :--- |
 | `<code>` | string | 是 | 6 位基金代码 |
 | `--json` | boolean | `false` | 以结构化 JSON 格式输出结果，同时禁用所有交互式 UI 动画与引导文字，适用于 jq、管道操作及程序化自动化处理 |
 | `--text` | boolean | `false` | 以纯文本格式输出结果，去除控制台颜色和特殊 UI 符号，生成结构清晰的文字摘要，专为 LLM / AI Agent 优化消费 |
 
-### 使用示例 (Examples)
+#### 使用示例 (Examples)
 ```bash
 jgb returns 005827
 ```
 
-### 输出格式 (Output)
+#### 输出格式 (Output)
 **默认表格输出 (`table`)**：
 ```
 阶段         涨跌幅
@@ -289,15 +289,15 @@ jgb returns 005827
 
 ## 2.5 `jgb trend` —— 查询基金走势图数据
 
-### 语法 (Synopsis)
+#### 语法 (Synopsis)
 ```bash
 jgb trend <code> [options]
 ```
 
-### 描述 (Description)
+#### 描述 (Description)
 获取指定基金在当天交易时段（9:30-15:00）或近期多天的日内每分钟估值变动采样序列点。
 
-### 参数与选项 (Arguments & Options)
+#### 参数与选项 (Arguments & Options)
 | 参数/选项             | 类型 | 是否必填 | 说明 |
 |:------------------| :--- | :--- | :--- |
 | `<code>`          | string | 是 | 6 位基金代码 |
@@ -305,13 +305,13 @@ jgb trend <code> [options]
 | `--json`          | boolean | `false` | 以结构化 JSON 格式输出结果，同时禁用所有交互式 UI 动画与引导文字，适用于 jq、管道操作及程序化自动化处理 |
 | `--text`          | boolean | `false` | 以纯文本格式输出结果，去除控制台颜色和特殊 UI 符号，生成结构清晰的文字摘要，专为 LLM / AI Agent 优化消费 |
 
-### 使用示例 (Examples)
+#### 使用示例 (Examples)
 ```bash
 # 获取近一月净值走势数据
 jgb trend 005827 --range 1m
 ```
 
-### 输出格式 (Output)
+#### 输出格式 (Output)
 **默认表格输出 (`table`)**：
 ```
 基金代码: 005827
@@ -372,27 +372,27 @@ jgb trend 005827 --range 1m
 
 ## 2.6 `jgb holdings` —— 基金重仓股明细
 
-### 语法 (Synopsis)
+#### 语法 (Synopsis)
 ```bash
 jgb holdings <code> [options]
 ```
 
-### 描述 (Description)
+#### 描述 (Description)
 查询基金最新定期报告公布的前十大重仓股票列表、标的代码、占资产总值比例、持股数以及较上一报告期的增减变动。
 
-### 参数与选项 (Arguments & Options)
+#### 参数与选项 (Arguments & Options)
 | 参数/选项 | 类型 | 是否必填 | 说明 |
 | :--- | :--- | :--- | :--- |
 | `<code>` | string | 是 | 6 位基金代码 |
 | `--json`          | boolean | `false` | 以结构化 JSON 格式输出结果，同时禁用所有交互式 UI 动画与引导文字，适用于 jq、管道操作及程序化自动化处理 |
 | `--text`          | boolean | `false` | 以纯文本格式输出结果，去除控制台颜色和特殊 UI 符号，生成结构清晰的文字摘要，专为 LLM / AI Agent 优化消费 |
 
-### 使用示例 (Examples)
+#### 使用示例 (Examples)
 ```bash
 jgb holdings 005827
 ```
 
-### 输出格式 (Output)
+#### 输出格式 (Output)
 **默认表格输出 (`table`)**：
 ```
 基金代码: 005827
@@ -456,15 +456,15 @@ jgb holdings 005827
 
 ## 2.7 `jgb dividends` —— 历史分红记录
 
-### 语法 (Synopsis)
+#### 语法 (Synopsis)
 ```bash
 jgb dividends <code> [options]
 ```
 
-### 描述 (Description)
+#### 描述 (Description)
 查询基金成立以来的所有分红派息记录，包括权益登记日、除息日、派息日及每份分红金额。
 
-### 参数与选项 (Arguments & Options)
+#### 参数与选项 (Arguments & Options)
 | 参数/选项 | 类型 | 是否必填 | 说明 |
 | :--- | :--- | :--- | :--- |
 | `<code>` | string | 是 | 6 位基金代码 |
@@ -472,12 +472,12 @@ jgb dividends <code> [options]
 | `--json`          | boolean | `false` | 以结构化 JSON 格式输出结果，同时禁用所有交互式 UI 动画与引导文字，适用于 jq、管道操作及程序化自动化处理 |
 | `--text`          | boolean | `false` | 以纯文本格式输出结果，去除控制台颜色和特殊 UI 符号，生成结构清晰的文字摘要，专为 LLM / AI Agent 优化消费 |
 
-### 使用示例 (Examples)
+#### 使用示例 (Examples)
 ```bash
 jgb dividends 005827 --since 2024-01-01
 ```
 
-### 输出格式 (Output)
+#### 输出格式 (Output)
 **默认表格输出 (`table`)**：
 ```
 日期         每份分红    当日净值
@@ -509,15 +509,15 @@ jgb dividends 005827 --since 2024-01-01
 
 ## 2.8 `jgb ranking` —— 获取全市场基金估值排行
 
-### 语法 (Synopsis)
+#### 语法 (Synopsis)
 ```bash
 jgb ranking [options]
 ```
 
-### 描述 (Description)
+#### 描述 (Description)
 按日内估值涨幅、某历史阶段涨跌幅等指标，获取全网公募基金或特定分类基金的榜单排行。
 
-### 参数与选项 (Arguments & Options)
+#### 参数与选项 (Arguments & Options)
 | 参数/选项 | 类型 | 是否必填 | 说明 |
 | :--- | :--- | :--- | :--- |
 | `--sort <field>` | string | 否 | 3=估值涨幅(默认), 4=成交热度, 5=实际涨幅 |
@@ -527,7 +527,7 @@ jgb ranking [options]
 | `--json`          | boolean | `false` | 以结构化 JSON 格式输出结果，同时禁用所有交互式 UI 动画与引导文字，适用于 jq、管道操作及程序化自动化处理 |
 | `--text`          | boolean | `false` | 以纯文本格式输出结果，去除控制台颜色和特殊 UI 符号，生成结构清晰的文字摘要，专为 LLM / AI Agent 优化消费 |
 
-### 使用示例 (Examples)
+#### 使用示例 (Examples)
 ```bash
 # 查询今日全网估算涨幅前 5 名
 jgb ranking --size 5
@@ -536,7 +536,7 @@ jgb ranking --size 5
 jgb ranking --order asc --size 10
 ```
 
-### 输出格式 (Output)
+#### 输出格式 (Output)
 **默认表格输出 (`table`)**：
 ```
 排名  代码      名称                    估算涨幅
@@ -576,27 +576,27 @@ jgb ranking --order asc --size 10
 
 ## 2.9 `jgb best-source` —— 估值数据源精准度检测
 
-### 语法 (Synopsis)
+#### 语法 (Synopsis)
 ```bash
 jgb best-source <code> --jzrq <date> --actual-zzl <val> [options]
 ```
 
-### 描述 (Description)
+#### 描述 (Description)
 对比不同数据源在指定日期的估值准确度，返回最佳数据源编号
 
-### 参数与选项 (Arguments & Options)
+#### 参数与选项 (Arguments & Options)
 | 参数/选项 | 类型 | 是否必填 | 说明 |
 | :--- | :--- | :--- | :--- |
 | `<code>` | string | 是 | 6 位基金代码 |
 | `--jzrq <date>` | string | 是 | 回测对比的净值确认日，如 `2026-06-18` |
 | `--actual-zzl <val>`| number| 是 | 当天官方最终公布的实际涨跌幅（如 `-0.60`） |
 
-### 使用示例 (Examples)
+#### 使用示例 (Examples)
 ```bash
 jgb best-source 005827 --jzrq 2026-06-18
 ```
 
-### 输出格式 (Output)
+#### 输出格式 (Output)
 **默认表格输出 (`table`)**：
 ```
 基金代码: 005827
