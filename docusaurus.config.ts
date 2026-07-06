@@ -118,7 +118,7 @@ const config: Config = {
             },
             {
               label: '使用文档',
-              to: '/docs/intro',
+              to: '/docs/help',
             },
           ],
         },

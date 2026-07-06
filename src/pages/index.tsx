@@ -301,7 +301,7 @@ function HeroSection() {
           </StarBorder>
           <Link
             className={styles.heroBtnSecondary}
-            to="/docs/intro">
+            to="/docs/help">
             查看文档
           </Link>
         </div>
