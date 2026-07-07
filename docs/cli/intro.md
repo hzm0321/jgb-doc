@@ -78,3 +78,20 @@ jgb <command> [subcommand] [arguments] [options]
 | **自选与分组** | `jgb watchlist add/remove <code>` | v2.1 | 将基金快捷关注至自选池或移出一键观察 |
 | **自选与分组** | `jgb group create/edit/delete <name>` | v2.1 | 自定义创建持仓与自选的分组体系，调整排布逻辑 |
 | **数据同步** | `jgb sync push` / `jgb sync pull` | v2.2 | 手动触发本地数据库与 Supabase 云端的全量双向同步覆盖 |
+
+---
+
+## 四、微信交流群与社区反馈
+
+`@jigubao/cli` 的持续演进离不开每一位开发者的真实反馈与实战经验分享。为此，我们建立了「基估宝 CLI 用户支持群」，这是一个专为 Pro 会员、CLI 开发者及自动化投资爱好者打造的专属技术社群。在这里，你可以：
+
+- 📣 **第一时间获取版本动态**：CLI 版本更新公告、新功能预告与破坏性变更说明均会在群内同步首发。
+- 🤝 **交流实战经验**：与同行探讨 Shell 脚本自动化流水线搭建、AI Agent 集成模式、定投策略回测等进阶玩法。
+- 🐛 **加速问题反馈**：在使用中遇到的 Bug、数据源异常或功能建议，可直接在群内 @官方成员，获得更快的响应与跟进。
+- 💡 **参与产品共建**：优质的功能建议与场景需求有机会被纳入正式 Roadmap，你的声音将直接影响 CLI 的演进方向。
+
+扫描下方二维码，即可直接加入「基估宝 CLI 用户支持群」：
+
+<div align="center">
+    <img src={require('./assets/WeChat.jpg').default} alt="CLI 群" width="40%" />
+</div>
