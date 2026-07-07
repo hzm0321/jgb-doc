@@ -6,45 +6,44 @@ sidebar_label: 5. AI Agent 集成
 
 # AI Agent 与脚本集成指南
 
-`jgb-cli` 在架构设计之初就将 **“机器可读性”** 与 **“AI Agent 友好性”** 提升至第一优先级的公民地位。为了让诸如 OpenClaw、AutoGPT、LangChain、以及各类自动化 Shell 管道能够以零幻觉、零猜测的高可靠性交互解析数据，CLI 提供了一整套标准化集成接口与输出协议。
+`@jigubao/cli` 在架构设计之初就将 **“机器可读性”** 与 **“AI Agent 友好性”** 提升至第一优先级的公民地位。为了让诸如 OpenClaw、AutoGPT、LangChain、以及各类自动化 Shell 管道能够以零幻觉、零猜测的高可靠性交互解析数据，CLI 提供了一整套标准化集成接口与输出协议。
 
 ---
 
-## 一、全局 `--format` 输出控制规范
+## 一、全局输出控制规范
 
-所有读取类命令均支持通过 `--format` 参数显式声明预期返回的数据结构结构与表现形式：
+为了满足不同集成场景的需求，`@jigubao/cli` 支持通过全局通用选项（Global Flags）控制返回的数据结构与表现形式：
+
+- **默认输出 (表格/常规文本)**：以对齐表格或易于人类阅读的格式展现，包含控制台颜色、特殊 UI 符号等。
+- **结构化 JSON 输出 (`--json`)**：以结构化 JSON 格式输出结果，同时禁用所有交互式 UI 动画与引导文字，适用于 `jq`、脚本管道操作及程序化自动化处理，是 AI Agent 默认推荐使用的输出格式。
+- **纯文本输出 (`--text`)**：以纯文本格式输出结果，去除控制台颜色和特殊 UI 符号，生成结构清晰的文字摘要。该模式专为大语言模型（LLM）的 Prompt 上下文进行优化，可显著降低 Token 消耗，并省去 LLM 的反序列化解析步骤，提示词注入成本最低。
 
 ```bash
-jgb info 005827 --format json          # 结构化 JSON 对象（AI Agent 默认推荐使用）
-jgb search "易方达" --format jsonl       # 流式 JSON Lines（多条目流式处理场景）
-jgb holdings 005827 --format csv       # 标准 CSV 格式（便于导入 Excel/Python Pandas）
-jgb portfolio list --format table      # 对齐表格（终端人类开发者常规阅读默认形式）
-jgb info 005827 --format text          # 纯文本键值摘要（专为 LLM Prompt 上下文优化）
+jgb info 005827 --json          # 结构化 JSON 对象（AI Agent 默认推荐使用）
+jgb search "易方达" --json        # 结构化 JSON 数组/对象
+jgb info 005827 --text          # 纯文本键值摘要（专为 LLM Prompt 上下文优化）
 ```
 
-### 格式选型指导与最佳实践
+### 选型指导与最佳实践
 
-- **`json`**：输出合法的单个完整 JSON 对象，所有数值保持原始基本数据类型（浮点数与整型不转为字符串），布尔状态明确，适合各种语言编程或 Agent 的 JSON Parser 消费。
-- **`jsonl`**：列表查询命令中每行输出独立的一个合乎规范的 JSON 文本对象，外层不使用方括号 `[]` 包裹。此模式最适合在管道中结合 `jq`、`grep`、`sed` 逐行流式解析，避免大列表对内存的瞬间峰值消耗。
-- **`text`**：为了优化大语言模型（LLM）的 Token 占用，系统会过滤所有无意义的边界框线与 JSON 括号，仅以 `Field Name: Value` 的极简自然语言格式成段输出，省去 LLM 反序列化解析步骤，提示词注入成本最低。
+- **`--json`**：输出合法的单个完整 JSON 对象或数组，所有数值保持原始基本数据类型（浮点数与整型不转为字符串），布尔状态明确，适合各种编程语言或 AI Agent 的 JSON 解析器消费。
+- **`--text`**：系统会过滤所有无意义的边界框线与 JSON 括号，仅以 `Field Name: Value` 的极简自然语言格式成段输出。
 
 ---
 
 ## 二、统一 JSON 响应信封结构 (Response Envelope Schema)
 
-无论调用哪一条 CLI 命令，当 `--format json` 被开启时，最外围 JSON 数据结构必须遵守全局统一的响应信封规约。通过固定响应契约，AI Agent 的工具调用解析层只需编写同一套逻辑即可解析任意返回信息。
+无论调用哪一条 CLI 命令，当 `--json` 被开启时，最外围 JSON 数据结构必须遵守全局统一的响应信封规约。通过固定响应契约，AI Agent 的工具调用解析层只需编写同一套逻辑即可解析任意返回信息。
 
 ### 2.1 成功响应格式 (Success Response)
 ```json
 {
   "ok": true,
-  "command": "jgb info",
+  "command": "info",
   "version": "2.2.1",
   "timestamp": "2026-07-03T14:30:00+08:00",
   "data": {
-    "code": "005827",
-    "name": "易方达蓝筹精选混合",
-    "dwjz": 1.2345
+    // 具体命令返回的业务数据
   }
 }
 ```
@@ -54,17 +53,16 @@ jgb info 005827 --format text          # 纯文本键值摘要（专为 LLM Prom
 ```json
 {
   "ok": true,
-  "command": "jgb search",
+  "command": "search",
   "version": "2.2.1",
   "timestamp": "2026-07-03T14:30:00+08:00",
   "data": [
-    { "code": "005827", "name": "易方达蓝筹精选混合" },
-    { "code": "009342", "name": "易方达优质精选三年持有期" }
+    // 具体命令返回的业务数据
   ],
   "meta": {
     "total": 128,
     "page": 1,
-    "pageSize": 20,
+    "limit": 20,
     "hasMore": true
   }
 }
@@ -89,51 +87,33 @@ jgb info 005827 --format text          # 纯文本键值摘要（专为 LLM Prom
 
 ## 三、全局退出码规范 (Exit Codes)
 
-为了契合 Linux 传统脚本脚本环境以及现代 CI/CD 自动化检测流，`jgb-cli` 严格划分并映射了命令执行的终态退出码（Exit Code）：
+为了契合 Linux 传统脚本环境以及现代 CI/CD 自动化检测流，`@jigubao/cli` 严格划分并映射了命令执行的终态退出码（Exit Code）。每个退出码都对应明确的 AI Agent 处理策略，便于智能体进行精准的分支决策与自动恢复：
 
-| 退出码 (Code) | 状态定义 | 典型出现场景与排查建议 |
-| :---: | :--- | :--- |
-| **`0`** | `SUCCESS` | 指令成功执行并输出合规结果。 |
-| **`1`** | `GENERAL_ERROR` | 未捕获的内部通用业务异常。 |
-| **`2`** | `INVALID_ARGUMENT`| CLI 传入的参数数量不匹配或选项拼写错误（如非法的 `--format xml`）。 |
-| **`3`** | `AUTH_REQUIRED` | 需要用户凭据的指令（如操作需要会话 Token），但当前尚未登录或 Token 过期。 |
-| **`4`** | `RESOURCE_NOT_FOUND` | 指定的查询标的（如错误的基金代码 `999999`）在底层数据库或第三方服务中未匹配。 |
-| **`5`** | `NETWORK_TIMEOUT`| 连接天天基金、新浪财经或 Supabase 接口时遇到 DNS 解析失败、网络超时。 |
-| **`6`** | `PARSE_ERROR` | 远端数据源响应格式异常（如 HTML 反爬验证拦截或脚本解析器失败）。 |
+| 退出码 | 含义 | AI Agent 处理方式 |
+|--------|------|-------------------|
+| `0` | 成功 | 继续解析 JSON `data` |
+| `1` | 一般错误（网络超时、数据源异常等） | 读取 `error.code` 决定是否重试 |
+| `2` | 参数错误（缺必填参数、格式不合法） | 不重试，修正参数后重新调用 |
+| `3` | 认证失败（token 过期、未登录） | 触发重新认证流程 |
+| `4` | 资源不存在（基金代码无效、分组ID不存在） | 不重试 |
+| `5` | 限流（每日 OCR 上限等） | 等待后重试或放弃 |
 
-> [!TIP]
-> 在编写自动化运维监控 Shell 脚本时，可利用 `$?` 检查退出码。如果返回值是 `5`（网络超时），你的脚本或 AI Agent 可选择自动重试；如果返回值是 `4`（标的不存在），则可以直接放弃而无须无效重试。
+:::tip
+
+在编写自动化运维监控 Shell 脚本时，可利用 `$?` 检查退出码。如果返回值是 `1`（一般错误），你的脚本或 AI Agent 应读取 `error.code` 决定是否重试；如果返回值是 `4`（资源不存在），则可以直接放弃而无须无效重试；遇到 `5`（限流）时应等待一段时间后再重试。
+
+:::
 
 ---
 
 ## 四、高级进阶筛选与管道流式操作
 
-### 4.1 `--fields` 字段投影与 `--compact` 精简处理
-当只需要结果集中特定的一两个指标属性时，可以开启字段投影优化，降低网络传输及 JSON 序列化的数据体积开销：
-```bash
-# 仅查询指定基金代码数组中的当前净值、日增长率两个字段
-jgb info 005827 --fields code,dwjz,zzl --format json
-
-# 开启 --compact 精简输出模式，自动压缩 JSON 空白缩进，减少 LLM Token 数量
-jgb portfolio list --compact --format json
-```
-
-### 4.2 `--filter` 条件表达式筛查
-全线列表类命令均内置了表达式过滤计算引擎，允许直接通过类似 SQL 表达式的方式对远端或本地数据集执行精细过滤：
-```bash
-# 查询大盘行情中仅涨幅大于 1.5% 的指数
-jgb market --filter "changePercent > 1.5"
-
-# 在持仓中筛选成本净值高于最新净值的“被套牢”亏损资产
-jgb portfolio list --filter "currentNav < costNav" --format json
-```
-
-### 4.3 `--pipe` 与命令行管道的深度串联
-利用极简输出模式或 JSON 过滤，能够轻易将基估宝与其他工具（如 `jq`、`awk`、`xargs`、`curl`、`bc`、微信通知机器人）串联打造自动化投资监控流水线：
+### 4.1 `--pipe` 与命令行管道的深度串联
+利用JSON 过滤，能够轻易将基估宝与其他工具（如 `jq`、`awk`、`xargs`、`curl`、`bc`、微信通知机器人）串联打造自动化投资监控流水线：
 
 ```bash
 # 案例：查询个人持仓列表中今日估盈大于 1000 元的标的，并通过管道发送 Webhook 消息
-jgb portfolio list --format json | jq -r '.data.holdings[] | select(.profit > 1000) | "\(.name): 今日盈利 \(.profit)元"' | while read msg; do
+jgb holding list --json | jq -r '.data.holdings[] | select(.profit > 1000) | "\(.name): 今日盈利 \(.profit)元"' | while read msg; do
   curl -s -X POST -H "Content-Type: application/json" -d "{\"text\": \"$msg\"}" https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=xxx
 done
 ```
@@ -176,7 +156,7 @@ jgb describe --command "jgb info" --schema
 ├── jgb search <keyword>      # 基金搜索指令
 ├── jgb info <code>           # 单基金实时估值与概览
 ├── jgb market                # 大盘指数与全球行情
-└── jgb portfolio list        # 账户持仓查询与对账
+└── jgb holding list          # 账户持仓查询与对账
 ```
 
 **JSON Schema 输出 (`--schema`)**：
@@ -205,7 +185,7 @@ jgb doctor [options]
 ```
 
 #### 描述 (Description)
-执行一键式的全方位自动化健康排查。系统将按顺序验证 Node.js 运行时兼容性、配置目录读写权限、本地缓存 SQLite 数据库完整性、以及与天天基金、新浪财经、Supabase 云端 API 等外部依赖服务的连通延迟。
+执行一键式的全方位自动化健康排查。系统将按顺序验证 Node.js 运行时兼容性、配置目录读写权限、本地缓存 SQLite 数据库完整性、当前账号的会员身份与到期状态、以及与天天基金、新浪财经、Supabase 云端 API 等外部依赖服务的连通延迟。
 
 #### 参数与选项 (Arguments & Options)
 | 参数/选项 | 类型 | 是否必填 | 说明 |
@@ -217,11 +197,6 @@ jgb doctor [options]
 ```bash
 # 执行日常自检
 jgb doctor
-
-# 在脚本中判断环境是否健康
-if ! jgb doctor --json | jq -e '.data.healthy'; then
-  echo "环境自检未通过，请检查网络与鉴权配置！"
-fi
 ```
 
 #### 输出格式 (Output)
@@ -229,17 +204,18 @@ fi
 ```
 基估宝 CLI 环境诊断结果
 ─────────────────────────────────────────────────────────────
-✔ [运行环境] Node.js 运行时版本 v20.11.0 满足要求 (>=18.0.0)
-✔ [文件权限] 目录 ~/.jgb 读写权限正常
+✔ [运行环境]   Node.js 运行时版本 v20.11.0 满足要求 (>=18.0.0)
+✔ [文件权限]   目录 ~/.jgb 读写权限正常
 ✔ [本地数据库] 本地轻量缓存库 cache.db 表结构校验完好
 ✔ [行情连通性] 天天基金 (ttjj) HTTP 接口连通正常 [延迟: 45ms]
 ✔ [行情连通性] 新浪财经 (sina) HTTP 接口连通正常 [延迟: 38ms]
 ✔ [云端认证]   Supabase Auth 认证服务连通且 Token 有效
+✔ [会员身份]   当前为 Pro 会员，到期时间：2027-03-15 23:59:59
 ─────────────────────────────────────────────────────────────
 🎉 恭喜！当前所有系统与网络依赖状态健康，CLI 可以完美运行！
 ```
 
-**JSON 结构化输出 (`--format json`)**：
+**JSON 结构化输出 (`--json`)**：
 ```json
 {
   "ok": true,
@@ -251,8 +227,29 @@ fi
       { "name": "node_runtime", "status": "ok", "message": "v20.11.0" },
       { "name": "fs_permission", "status": "ok", "message": "read/write OK" },
       { "name": "api_ttjj", "status": "ok", "latencyMs": 45 },
-      { "name": "api_sina", "status": "ok", "latencyMs": 38 }
+      { "name": "api_sina", "status": "ok", "latencyMs": 38 },
+      {
+        "name": "membership",
+        "status": "ok",
+        "message": "Pro 会员有效",
+        "plan": "pro",
+        "expireAt": "2027-03-15T23:59:59+08:00",
+        "daysRemaining": 620
+      }
     ]
   }
 }
 ```
+
+:::info 会员状态判定说明
+
+`membership` 检查项的 `status` 字段会根据当前账号会员状态返回不同取值，便于 AI Agent 或脚本据此执行差异化策略：
+
+| `status` | 含义 | 终端报告示例 |
+| :--- | :--- | :--- |
+| `ok` | 已登录且为有效 Pro 会员 | `✔ [会员身份] 当前为 Pro 会员，到期时间：2027-03-15 23:59:59` |
+| `warn` | 会员即将到期（剩余天数 ≤ 7 天） | `⚠ [会员身份] Pro 会员将于 3 天后到期，请及时续费` |
+| `expired` | 会员已过期，当前为免费版 | `✖ [会员身份] Pro 会员已于 2026-06-30 过期，部分功能受限` |
+| `unauthenticated` | 未登录或 Token 失效，无法获取会员信息 | `✖ [会员身份] 未检测到登录态，请先执行 jgb login` |
+
+:::

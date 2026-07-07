@@ -36,7 +36,7 @@ jgb search "易方达蓝筹"
 jgb search 0058 --limit 3
 
 # AI Agent 自动化集成查询 JSON
-jgb search "沪深300" --format json
+jgb search "沪深300" --json
 ```
 
 #### 输出格式 (Output)
@@ -612,7 +612,7 @@ jgb best-source 005827 --jzrq 2026-06-18
 新浪估算3      偏差: 0.34
 ```
 
-**JSON 结构化输出 (`--format json`)**：
+**JSON 结构化输出 (`--json`)**：
 ```json
 {
   "ok": true,

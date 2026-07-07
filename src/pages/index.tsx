@@ -165,6 +165,25 @@ function CloudSyncIcon() {
   );
 }
 
+function GlobeIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+      <path d="M2 12h20" />
+    </svg>
+  );
+}
+
+function WalletIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 1 0-4h3" />
+      <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" />
+    </svg>
+  );
+}
+
 function CopyIcon() {
   return (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -187,28 +206,42 @@ const cliFeatureItems = [
     icon: <TerminalIcon />,
     iconClass: styles.featureIconCyan,
     title: '⚡️ 极速只读行情',
-    description: '专为高频行情监控与持仓对账设计，毫秒级响应，零副作用，生产环境安全无忧。',
+    description: '覆盖基金搜索、实时估值、历史净值、阶段涨跌、重仓股、分红与全市场排行，v1 全量命令零副作用只读，毫秒级响应，生产环境安全无忧。',
     spotlightColor: 'rgba(34, 211, 238, 0.25)',
+  },
+  {
+    icon: <GlobeIcon />,
+    iconClass: styles.featureIconYellow,
+    title: '🌐 全球行情与板块归因',
+    description: '批量获取 A 股、美股、港股及全球核心指数实时报价，查询 A 股交易日历，并按行业/概念板块追踪主力资金流向，辅助宏观归因研判。',
+    spotlightColor: 'rgba(251, 191, 36, 0.25)',
+  },
+  {
+    icon: <WalletIcon />,
+    iconClass: styles.featureIconPink,
+    title: '💼 持仓盈亏全景对账',
+    description: '一条命令把账户搬进终端：持仓列表与实时估值、自选池、分组标签、交易流水、待处理队列、定投计划及每日盈亏，全程只读对账零修改。',
+    spotlightColor: 'rgba(244, 114, 182, 0.25)',
   },
   {
     icon: <BotIcon />,
     iconClass: styles.featureIconBlue,
     title: '🤖 AI Agent 原生支持',
-    description: '独创响应信封与标准 JSON/JSONL/Text 格式输出，无缝集成 OpenClaw 与自动化管道。',
+    description: '统一 JSON 响应信封与 --json/--text 双模式输出，配合分级退出码与管道流式操作，无缝接入 OpenClaw、LangChain 与 Shell 自动化管道。',
     spotlightColor: 'rgba(96, 165, 250, 0.25)',
   },
   {
     icon: <StethoscopeIcon />,
     iconClass: styles.featureIconGreen,
     title: '🩺 智能自检与诊断',
-    description: '内置 describe 命令树元数据自述与 doctor 全栈环境自检，一键定位网络与数据源连通性。',
+    description: 'describe 输出全量命令树元数据与 JSON Schema 供智能体能力发现，doctor 一键自检运行时、权限、缓存库、会员身份与多数据源连通延迟。',
     spotlightColor: 'rgba(52, 211, 153, 0.25)',
   },
   {
     icon: <CloudSyncIcon />,
     iconClass: styles.featureIconPurple,
     title: '🔐 跨端云数据同步',
-    description: '通过 Token 联动 Supabase 账号，与 PC/Web 端实时共享自选关注池、分组资产与交易流水。',
+    description: '登录联动 Supabase 云端账号，终端与 PC/Web 端共享同一份账户数据，查询结果即云端最新，无需手动导入导出或来回切换设备。',
     spotlightColor: 'rgba(167, 139, 250, 0.25)',
   },
 ];
@@ -393,7 +426,7 @@ function CliInstallPill() {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = useCallback(() => {
-    navigator.clipboard.writeText('npm install -g @jgb/cli').then(() => {
+    navigator.clipboard.writeText('npm install -g @jigubao/cli').then(() => {
       setCopied(true);
       setTimeout(() => {
         setCopied(false);
@@ -401,7 +434,7 @@ function CliInstallPill() {
     }).catch(() => {
       try {
         const input = document.createElement('input');
-        input.value = 'npm install -g @jgb/cli';
+        input.value = 'npm install -g @jigubao/cli';
         document.body.appendChild(input);
         input.select();
         document.execCommand('copy');
@@ -427,7 +460,7 @@ function CliInstallPill() {
           handleCopy();
         }
       }}>
-      <code>$ npm install -g @jgb/cli</code>
+      <code>$ npm install -g @jigubao/cli</code>
       <button
         type="button"
         className={clsx(styles.copyIconBtn, copied && styles.copyIconBtnCopied)}
@@ -459,7 +492,7 @@ function CliSection() {
       <div className="container">
         <Reveal>
           <Heading as="h2" className={styles.featuresSectionTitle}>
-            <ShinyText speed={4}>基估宝命令行接口 (jgb-cli)</ShinyText>
+            <ShinyText speed={4}>基估宝命令行接口 (@jigubao/cli)</ShinyText>
           </Heading>
           <p className={styles.featuresSectionDesc}>
             无需打开浏览器，在终端、Shell 脚本或 AI Agent 中毫秒级触达全网行情与个人持仓
@@ -476,25 +509,28 @@ function CliSection() {
                     <span className={clsx(styles.cliLight, styles.cliLightYellow)} />
                     <span className={clsx(styles.cliLight, styles.cliLightGreen)} />
                   </div>
-                  <div className={styles.cliTerminalTitle}>zsh — jgb portfolio list — 80×24</div>
+                  <div className={styles.cliTerminalTitle}>zsh — jgb holding list — 80×24</div>
                 </div>
                 <div className={styles.cliTerminalBody}>
                   <div>
                     <span className={styles.cliPrompt}>~</span>
-                    <span className={styles.cliCommand}>jgb portfolio list --format table</span>
+                    <span className={styles.cliCommand}>jgb holding list</span>
                   </div>
                   <div className={styles.cliOutput}>
-                    <div>账户持仓概览 (当前估算总值: ¥158,450.00 | 浮动盈亏: <span className={styles.cliOutputHighlight}>+¥12,450.00 [+8.53%]</span>)</div>
-                    <div>代码     基金名称               成本净值   最新估值   持仓市值      浮动盈亏 (率)</div>
-                    <div>─────────────────────────────────────────────────────────────────────────────</div>
-                    <div>005827   易方达蓝筹精选混合     1.1500     1.2400     ¥12,400.00    <span className={styles.cliOutputHighlight}>+¥900.00 (+7.83%)</span></div>
-                    <div>012345   半导体先锋股票 A       1.5000     1.8560     ¥92,800.00    <span className={styles.cliOutputHighlight}>+¥17,800.00 (+23.73%)</span></div>
+                    <div>代码       名称                 份额        成本净值    持仓金额     持有收益     收益率</div>
+                    <div>──────────────────────────────────────────────────────────────────────────────────────────</div>
+                    <div>005827    易方达蓝筹精选混合    10000.00    1.1500      ¥12400.00    <span className={styles.cliOutputHighlight}>+900.00      +7.83%</span></div>
+                    <div>012345    半导体先锋股票A       50000.00    1.5000      ¥92800.00    <span className={styles.cliOutputHighlight}>+17800.00    +23.73%</span></div>
+                    <div>合计: 持仓金额 ¥105,200.00  总收益 +18,700.00  收益率 +21.62%</div>
                   </div>
                   <div>
                     <span className={styles.cliPrompt}>~</span>
-                    <span className={styles.cliCommand}>jgb price 005827 --type gsz</span>
+                    <span className={styles.cliCommand}>jgb info 005827 --text</span>
                   </div>
-                  <div className={styles.cliOutput}>1.2400</div>
+                  <div className={styles.cliOutput}>
+                    <div>基金名称: 易方达蓝筹精选混合</div>
+                    <div>最新估值: 1.2400 (涨幅: +0.45%)</div>
+                  </div>
                   <div>
                     <span className={styles.cliPrompt}>~</span>
                     <span className={styles.cliCommand}>jgb market --filter a-share</span>
@@ -504,25 +540,25 @@ function CliSection() {
               </div>
             </TiltCard>
           </Reveal>
+        </div>
 
-          <div className={styles.cliFeaturesGrid}>
-            {cliFeatureItems.map((item, idx) => (
-              <Reveal key={idx} delay={200 + idx * 80}>
-                <SpotlightCard
-                  className={styles.featureCardCustom}
-                  spotlightColor={item.spotlightColor}
-                  spotlightSize={300}>
-                  <div className={clsx(styles.featureIcon, item.iconClass)}>
-                    {item.icon}
-                  </div>
-                  <Heading as="h3" className={styles.featureTitle}>
-                    {item.title}
-                  </Heading>
-                  <p className={styles.featureDesc}>{item.description}</p>
-                </SpotlightCard>
-              </Reveal>
-            ))}
-          </div>
+        <div className={styles.cliFeaturesGrid}>
+          {cliFeatureItems.map((item, idx) => (
+            <Reveal key={idx} delay={200 + idx * 80}>
+              <SpotlightCard
+                className={styles.featureCardCustom}
+                spotlightColor={item.spotlightColor}
+                spotlightSize={300}>
+                <div className={clsx(styles.featureIcon, item.iconClass)}>
+                  {item.icon}
+                </div>
+                <Heading as="h3" className={styles.featureTitle}>
+                  {item.title}
+                </Heading>
+                <p className={styles.featureDesc}>{item.description}</p>
+              </SpotlightCard>
+            </Reveal>
+          ))}
         </div>
 
         <Reveal delay={400}>
