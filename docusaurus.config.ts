@@ -91,7 +91,7 @@ const config: Config = {
           label: 'CLI 文档',
         },
         {
-          href: 'https://fund.cc.cd/home/',
+          href: 'https://fund.cc.cd',
           label: '在线体验',
           position: 'left',
         },
@@ -110,7 +110,7 @@ const config: Config = {
           items: [
             {
               label: '在线体验',
-              href: 'https://fund.cc.cd/home/',
+              href: 'https://fund.cc.cd',
             },
             {
               label: '使用文档',
