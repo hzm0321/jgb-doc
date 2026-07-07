@@ -241,7 +241,8 @@ jgb doctor
 }
 ```
 
-:::info 会员状态判定说明
+:::info 
+会员状态判定说明
 
 `membership` 检查项的 `status` 字段会根据当前账号会员状态返回不同取值，便于 AI Agent 或脚本据此执行差异化策略：
 
