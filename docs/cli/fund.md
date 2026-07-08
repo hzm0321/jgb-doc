@@ -32,9 +32,6 @@ jgb search <keyword> [options]
 # 按基金名称关键词搜索
 jgb search "易方达蓝筹"
 
-# 精准或前缀匹配代码搜索，限制返回 3 条
-jgb search 0058 --limit 3
-
 # AI Agent 自动化集成查询 JSON
 jgb search "沪深300" --json
 ```
