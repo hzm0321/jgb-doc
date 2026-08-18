@@ -40,19 +40,29 @@ jgb -v
 
 `@jigubao/cli` 采用基于 Supabase Auth 的云端身份认证体系。安装完成后，你需要先完成登录以绑定基估宝 Pro 会员账号，从而解锁持仓查询、交易流水、定投记录等个人账户相关功能。公开的基金行情查询指令（如 `search`、`info`、`market`）无需登录即可直接使用。
 
-CLI 提供以下三个认证管理指令：
+CLI 提供以下认证管理指令：
 
 | 指令 | 说明 |
 | :--- | :--- |
-| `jgb login` | 启动交互式登录流程，通过邮箱密码或验证码完成 Supabase 身份认证，认证成功后将 Token 持久化保存至本地 `~/.jgb/` 目录 |
+| `jgb login` | 启动交互式邮箱验证码登录流程，通过邮箱接收 6 位 OTP 验证码完成 Supabase 身份认证，认证成功后将 Token 持久化保存至本地 `~/.jgb/` 目录 |
+| `jgb login password` | 账号密码登录，通过邮箱和密码直接登录 Supabase 账号，无需验证码。支持 `--email` 和 `--password` 参数实现非交互式直接登录 |
 | `jgb logout` | 清除本地保存的登录凭证与会话 Token，退出当前账号登录状态 |
 | `jgb status` | 查看当前登录状态，显示已登录账号的邮箱、会员等级及到期时间；若未登录则提示需要先执行 `jgb login` |
 
 #### 使用示例
 
 ```bash
-# 首次使用，执行登录
+# 方式一：邮箱验证码登录（交互式）
 jgb login
+
+# 方式二：账号密码登录（交互式，逐步提示输入邮箱和密码）
+jgb login password
+
+# 方式三：账号密码直接登录（非交互式，适合脚本自动化）
+jgb login password --email user@example.com --password mypassword123
+
+# 方式四：仅传入邮箱，交互式输入密码
+jgb login password --email user@example.com
 
 # 查看当前登录状态与会员信息
 jgb status
@@ -62,7 +72,18 @@ jgb logout
 ```
 
 :::note
-`login` 与 `logout` 指令为交互式操作，不支持 `--json` / `--text` 结构化输出模式。`status` 指令支持结构化输出，可通过 `jgb status --json` 获取机器可读的会话信息，便于在自动化脚本或 AI Agent 流程中进行登录态前置检查。
+`login` 与 `login password` 及 `logout` 指令为交互式操作，不支持 `--json` / `--text` 结构化输出模式。`status` 指令支持结构化输出，可通过 `jgb status --json` 获取机器可读的会话信息，便于在自动化脚本或 AI Agent 流程中进行登录态前置检查。
+:::
+
+:::tip 账号密码登录参数
+`jgb login password` 支持以下选项参数，实现非交互式直接登录，便于在 CI/CD 流水线或 Shell 脚本中自动化使用：
+
+| 选项 | 参数类型 | 说明 |
+| :--- | :--- | :--- |
+| `--email <email>` | string | 指定登录邮箱地址，跳过交互式邮箱输入提示 |
+| `--password <password>` | string | 指定登录密码，跳过交互式密码输入提示 |
+
+当两个参数同时提供时，完全不触发交互式提示，直接调用 Supabase Auth 完成登录；仅提供一个参数时，另一个仍通过交互式提示输入。
 :::
 
 ---
@@ -84,7 +105,7 @@ jgb <command> [subcommand] [arguments] [options]
 
 ### 全局通用选项 (Global Flags)
 
-无论调用哪个具体功能命令，以下通用参数选项均可在任意指令中挂载支持（注：login 与 logout 指令不支持结构化输出模式）：
+无论调用哪个具体功能命令，以下通用参数选项均可在任意指令中挂载支持（注：`login`、`login password` 与 `logout` 指令不支持结构化输出模式）：
 
 | 选项 (Flag) | 参数类型 | 默认值 | 说明 |
 | :--- | :--- | :--- | :--- |
