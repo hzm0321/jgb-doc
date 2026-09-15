@@ -1,6 +1,7 @@
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import type {PluginOptions as SearchOptions} from '@easyops-cn/docusaurus-search-local';
 
 const config: Config = {
   title: '基估宝',
@@ -66,6 +67,19 @@ const config: Config = {
           customCss: './src/css/custom.css',
         },
       } satisfies Preset.Options,
+    ],
+  ],
+
+  themes: [
+    [
+      '@easyops-cn/docusaurus-search-local',
+      {
+        hashed: 'filename',
+        language: ['en', 'zh'],
+        indexBlog: false,
+        highlightSearchTermsOnTargetPage: true,
+        searchBarPosition: 'right',
+      } satisfies SearchOptions,
     ],
   ],
 

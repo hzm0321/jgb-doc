@@ -117,15 +117,18 @@ $ jgb holding list
 
 #### 语法 (Synopsis)
 ```bash
-jgb holding status [--sort <field>] [--order <dir>] [--json] [--text]
+jgb holding status [--group <group>] [--sort <field>] [--order <dir>] [--json] [--text]
 ```
 
 #### 描述 (Description)
-获取资产组合的实时估算数据，包括最新估值、今日估算收益及累计盈亏比例。支持按指定字段排序展示。
+获取资产组合的实时估算数据，包括最新估值、今日估算收益及累计盈亏比例。默认汇总全部持仓（全局及各分组），同一基金跨分组持有时累加份额与总成本，并计算加权成本价。传入 `--group` 可按分组 ID 或唯一分组名称统计，仅使用该分组的持仓及交易记录计算明细、总市值、总成本、今日估算总收益和累计总盈亏。支持与排序、JSON 和纯文本输出选项组合使用。
+
+分组不存在时会报错；分组名称重复时需改用分组 ID。空分组返回空持仓，汇总指标为 0（纯文本模式提示“暂无持仓实时数据”）。
 
 #### 参数与选项 (Arguments & Options)
 | 参数/选项 | 类型 | 是否必填 | 说明 |
 | :--- | :--- | :--- | :--- |
+| `--group <group>` | string | 否 | 按分组 ID 或唯一分组名称统计；不传则汇总全部持仓（全局及各分组） |
 | `--sort <field>` | string | 否 | 排序字段，支持通用与模式特有别名映射：`code`、`name`、`share`/`todayShare`、`cost`/`costPrice`、`amount`/`todayValuation`、`profit`/`cumulativeProfitLoss`、`rate`/`profitRate`/`cumulativeProfitLossRatio`、`todayEarnings`/`today`/`earnings`（日内收益）、`gsz`/`nav`/`dwjz`（估算净值） |
 | `--order <dir>` | string | 否 | 排序方向，支持 `desc`（降序，估值/盈亏等数值指标默认）或 `asc`（升序，代码/名称默认） |
 | `--json` | boolean | `false` | 以 JSON 格式输出结构化报告 |
@@ -133,8 +136,17 @@ jgb holding status [--sort <field>] [--order <dir>] [--json] [--text]
 
 #### 使用示例 (Examples)
 ```bash
-# 查看表格形式实时估值状态
+# 查看全部持仓的实时估值状态及汇总
 jgb holding status
+
+# 按分组名称查看实时状态及分组统计
+jgb holding status --group "长期持有"
+
+# 按分组 ID 查询，按今日估算收益降序输出 JSON
+jgb holding status --group grp-01 --sort todayEarnings --order desc --json
+
+# 以纯文本输出指定分组的实时状态
+jgb holding status --group "长期持有" --text
 
 # 按今日估算收益排序（数值默认降序）
 jgb holding status --sort todayEarnings
@@ -144,6 +156,8 @@ jgb holding status --sort amount
 ```
 
 #### 输出格式 (Output)
+以下为默认全部汇总的示例。指定 `--group` 后，表格统计标题显示为“分组统计指标 (分组名称或 ID)”，所有输出模式的明细与汇总均限定在该分组，JSON 字段结构保持一致。
+
 **默认表格输出 (`table`)**：
 ```
 📊 资产组合实时状态报告 (2026-07-07)
@@ -171,21 +185,30 @@ jgb holding status --sort amount
       {
         "code": "110022",
         "name": "易方达消费行业股票",
-        "share": 1000.00,
-        "cost": 1.5000,
+        "dwjz": 1.5000,
         "gsz": 1.5200,
-        "todayProfit": 20.00,
-        "totalProfit": 20.00,
-        "profitRate": 1.33
+        "gszzl": 1.33,
+        "todayBuyShare": 0,
+        "todayBuyAmount": 0,
+        "todaySellShare": 0,
+        "todaySellAmount": 0,
+        "todayShare": 1000.00,
+        "yesterdayShare": 1000.00,
+        "todayNetPurchaseAmount": 0,
+        "todayValuation": 1520.00,
+        "yesterdayValuation": 1500.00,
+        "todayEarnings": 20.00,
+        "totalCost": 1500.00,
+        "cumulativeProfitLoss": 20.00,
+        "cumulativeProfitLossRatio": 1.3333333333333335,
+        "costPrice": 1.5000
       }
     ],
-    "summary": {
-      "totalValue": 1520.00,
-      "totalCost": 1500.00,
-      "todayProfit": 20.00,
-      "totalProfit": 20.00,
-      "profitRate": 1.33
-    }
+    "totalMarketValue": 1520.00,
+    "totalCost": 1500.00,
+    "totalCumulativeProfitLoss": 20.00,
+    "totalCumulativeProfitLossRatio": 1.3333333333333335,
+    "totalTodayEarnings": 20.00
   }
 }
 ```

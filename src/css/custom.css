@@ -91,6 +91,15 @@ body {
   border-bottom: 1px solid var(--jgb-border);
 }
 
+/* 文档搜索适配站点明暗主题 */
+html[data-theme] {
+  --search-local-modal-background: var(--jgb-bg);
+  --search-local-hit-background: var(--jgb-card);
+  --search-local-hit-color: var(--jgb-text);
+  --search-local-muted-color: var(--jgb-muted);
+  --search-local-hit-active-color: var(--jgb-bg);
+}
+
 /* Footer 暗色主题保持深色 */
 .footer--dark {
   background: #020617;
