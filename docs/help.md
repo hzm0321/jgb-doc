@@ -8,7 +8,7 @@ sidebar_label: 使用帮助
 
 欢迎使用基估宝！这是一个专注于实时基金估值、持仓管理与投资追踪的开源工具。本指南将帮助你快速上手并掌握各项高级功能。
 
-基估宝官方项目地址：[https://fund.cc.cd](https://fund.cc.cd)
+基估宝官方项目地址：[https://jigubao.app](https://jigubao.app)
 
 备用地址：[https://hzm0321.github.io/jgb-doc/](https://hzm0321.github.io/jgb-doc/)
 

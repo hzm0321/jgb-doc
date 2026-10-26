@@ -326,7 +326,7 @@ function HeroSection() {
         </p>
         <div className={styles.heroButtons}>
           <StarBorder
-            to="https://fund.cc.cd"
+            to="https://jigubao.app"
             color="#22d3ee"
             speed="4s"
             className={styles.starBtnWrapper}>

@@ -33,7 +33,7 @@ const config: Config = {
     v4: true,
   },
 
-  url: 'https://fund.cc.cd',
+  url: 'https://jigubao.app',
   baseUrl: '/home/',
 
   organizationName: 'hzm0321',
@@ -105,7 +105,7 @@ const config: Config = {
           label: 'CLI 文档',
         },
         {
-          href: 'https://fund.cc.cd',
+          href: 'https://jigubao.app',
           label: '在线体验',
           position: 'left',
         },
@@ -124,7 +124,7 @@ const config: Config = {
           items: [
             {
               label: '在线体验',
-              href: 'https://fund.cc.cd',
+              href: 'https://jigubao.app',
             },
             {
               label: '使用文档',
