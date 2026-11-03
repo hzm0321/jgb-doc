@@ -1,12 +1,15 @@
 ---
 sidebar_position: 4
-title: 持仓、自选与流水查询
-sidebar_label: 4. 持仓与流水 (holding)
+title: 持仓、自选与流水管理
+sidebar_label: 4. 持仓与流水
 ---
 
-# 持仓、自选与流水查询
+# 持仓、自选与流水管理
 
 本章收录所有与个人账户相关的状态查询指令，涵盖自选关注池、账户持仓资产管理、自定义分组体系、交易买卖流水、待确认申赎队列、定投执行记录及每日盈亏追踪。所有本章内的命令均能够帮助开发者便捷地将账户投资组合实时对账状态接入个人财务仪表盘或智能分析平台。
+
+
+CLI v2 同时支持持仓、自选、分组和流水写操作，具体语法与清理范围参见[交易与账户写操作](./operations)。每次修改均先同步最新云端，冲突处理参见[设备同步与冲突处理](./sync)。
 
 ---
 
@@ -25,13 +28,13 @@ jgb holding [list] [--group <group>] [--sort <field>] [--order <dir>] [--json] [
 列出当前所有持仓基金及其份额、成本、持仓金额。系统会自动结合当时最新的实时盘中估值（或官方净值），动态计算各基金的当前持仓资产总值、持有盈亏与盈亏比例，并在汇总行展示账户总持仓与总盈亏。支持传入分组 ID 或名称进行分组持仓查询，并支持按指定字段排序展示。
 
 #### 参数与选项 (Arguments & Options)
-| 参数/选项 | 类型 | 是否必填 | 说明 |
-| :--- | :--- | :--- | :--- |
-| `--group <group>` | string | 否 | 分组 ID 或分组名称，查看指定分组的持仓（如果分组名称存在多个相同名称，会报错提示使用分组 ID） |
-| `--sort <field>` | string | 否 | 排序字段，支持多别名映射：`code`、`name`、`share`、`cost`、`amount`、`profit`、`rate`/`profitRate`、`group` |
-| `--order <dir>` | string | 否 | 排序方向，支持 `desc`（降序，数值类指标默认）或 `asc`（升序，代码/名称/分组默认） |
-| `--json` | boolean | `false` | 以结构化 JSON 格式输出结果 |
-| `--text` | boolean | `false` | 以纯文本格式输出结果 |
+| 参数/选项 | 类型 | 是否必填 | 默认值 / 省略时行为 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| `--group <group>` | string | 否 | 不限定分组；查询全部账本 | 分组 ID 或分组名称，查看指定分组的持仓（如果分组名称存在多个相同名称，会报错提示使用分组 ID） |
+| `--sort <field>` | string | 否 | 不额外排序，保留原有顺序 | 排序字段，支持多别名映射：`code`、`name`、`share`、`cost`、`amount`、`profit`、`rate`/`profitRate`、`group` |
+| `--order <dir>` | string | 否 | 指定排序字段时，代码/名称/分组升序，其余降序；未指定字段时不生效 | 仅在指定 `--sort` 时生效，支持 `desc`（降序）或 `asc`（升序）；默认方向见左列 |
+| `--json` | boolean | 否 | `false` | 以结构化 JSON 格式输出结果 |
+| `--text` | boolean | 否 | `false` | 以纯文本格式输出结果 |
 
 #### 使用示例 (Examples)
 ```bash
@@ -126,13 +129,13 @@ jgb holding status [--group <group>] [--sort <field>] [--order <dir>] [--json] [
 分组不存在时会报错；分组名称重复时需改用分组 ID。空分组返回空持仓，汇总指标为 0（纯文本模式提示“暂无持仓实时数据”）。
 
 #### 参数与选项 (Arguments & Options)
-| 参数/选项 | 类型 | 是否必填 | 说明 |
-| :--- | :--- | :--- | :--- |
-| `--group <group>` | string | 否 | 按分组 ID 或唯一分组名称统计；不传则汇总全部持仓（全局及各分组） |
-| `--sort <field>` | string | 否 | 排序字段，支持通用与模式特有别名映射：`code`、`name`、`share`/`todayShare`、`cost`/`costPrice`、`amount`/`todayValuation`、`profit`/`cumulativeProfitLoss`、`rate`/`profitRate`/`cumulativeProfitLossRatio`、`todayEarnings`/`today`/`earnings`（日内收益）、`gsz`/`nav`/`dwjz`（估算净值） |
-| `--order <dir>` | string | 否 | 排序方向，支持 `desc`（降序，估值/盈亏等数值指标默认）或 `asc`（升序，代码/名称默认） |
-| `--json` | boolean | `false` | 以 JSON 格式输出结构化报告 |
-| `--text` | boolean | `false` | 以纯文本格式输出实时状态数据 |
+| 参数/选项 | 类型 | 是否必填 | 默认值 / 省略时行为 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| `--group <group>` | string | 否 | 不限定分组；查询全部账本 | 按分组 ID 或唯一分组名称统计；不传则汇总全部持仓（全局及各分组） |
+| `--sort <field>` | string | 否 | 不额外排序，保留原有顺序 | 排序字段，支持通用与模式特有别名映射：`code`、`name`、`share`/`todayShare`、`cost`/`costPrice`、`amount`/`todayValuation`、`profit`/`cumulativeProfitLoss`、`rate`/`profitRate`/`cumulativeProfitLossRatio`、`todayEarnings`/`today`/`earnings`（日内收益）、`gsz`/`nav`/`dwjz`（估算净值） |
+| `--order <dir>` | string | 否 | 指定排序字段时，代码/名称升序，其余降序；未指定字段时不生效 | 仅在指定 `--sort` 时生效，支持 `desc`（降序）或 `asc`（升序）；默认方向见左列 |
+| `--json` | boolean | 否 | `false` | 以 JSON 格式输出结构化报告 |
+| `--text` | boolean | 否 | `false` | 以纯文本格式输出实时状态数据 |
 
 #### 使用示例 (Examples)
 ```bash
@@ -232,12 +235,12 @@ jgb watchlist [list] [--sort <field>] [--order <dir>] [--json] [--text]
 列出当前所有已加入收藏（自选）的基金及其单位净值、估算净值、估算涨跌幅和估值时间，帮助用户快速追踪潜在调仓备选标的的走势。支持按指定字段排序展示。
 
 #### 参数与选项 (Arguments & Options)
-| 参数/选项 | 类型 | 是否必填 | 说明 |
-| :--- | :--- | :--- | :--- |
-| `--sort <field>` | string | 否 | 排序字段，支持多别名映射：`code`（基金代码）、`name`（基金名称）、`dwjz`/`nav`（单位净值）、`gsz`/`price`/`valuation`/`estimate`（实时估算净值）、`gszzl`/`rate`/`change`/`growth`（实时估算涨跌幅 %，[默认]）、`gztime`/`time`（估算时间） |
-| `--order <dir>` | string | 否 | 排序方向，支持 `desc`（降序，数值字段默认）或 `asc`（升序，代码/名称默认） |
-| `--json` | boolean | `false` | 以结构化 JSON 格式输出结果，同时禁用所有交互式 UI 动画与引导文字，适用于 jq、管道操作及程序化自动化处理 |
-| `--text` | boolean | `false` | 以纯文本格式输出结果，去除控制台颜色和特殊 UI 符号，生成结构清晰的文字摘要，专为 LLM / AI Agent 优化消费 |
+| 参数/选项 | 类型 | 是否必填 | 默认值 / 省略时行为 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| `--sort <field>` | string | 否 | 不额外排序，保留原有顺序 | 排序字段，支持多别名映射：`code`（基金代码）、`name`（基金名称）、`dwjz`/`nav`（单位净值）、`gsz`/`price`/`valuation`/`estimate`（实时估算净值）、`gszzl`/`rate`/`change`/`growth`（实时估算涨跌幅 %）、`gztime`/`time`（估算时间） |
+| `--order <dir>` | string | 否 | 指定排序字段时，代码/名称/时间升序，其余降序；未指定字段时不生效 | 仅在指定 `--sort` 时生效，支持 `desc`（降序）或 `asc`（升序）；默认方向见左列 |
+| `--json` | boolean | 否 | `false` | 以结构化 JSON 格式输出结果，同时禁用所有交互式 UI 动画与引导文字，适用于 jq、管道操作及程序化自动化处理 |
+| `--text` | boolean | 否 | `false` | 以纯文本格式输出结果，去除控制台颜色和特殊 UI 符号，生成结构清晰的文字摘要，专为 LLM / AI Agent 优化消费 |
 
 #### 使用示例 (Examples)
 ```bash
@@ -320,12 +323,12 @@ jgb group list [options]
 列出当前账户定义的所有自定义分类分组（如“长期持有”、“宽基指数”、“短线网格”等），并汇总各分组下包含的标的数量以及各个分组在持仓资产中的占比结构。传入 `--with-members` 可在输出中展开各分组的详细成员名单，同时展示每只成员基金的代码与完整名称。
 
 #### 参数与选项 (Arguments & Options)
-| 参数/选项 | 类型 | 是否必填 | 说明 |
-| :--- | :--- | :--- | :--- |
-| `--type <type>`  | string | 否 | 过滤分组归属：`holding`（持仓分组）、`watchlist`（自选分组）、`all`（默认） |
-| `--with-members` | flag   | 否 | 在输出中展开列示各分组所包含的全部详细成员基金，同时展示基金代码与完整名称 |
-| `--json` | boolean | `false` | 以结构化 JSON 格式输出结果，同时禁用所有交互式 UI 动画与引导文字，适用于 jq、管道操作及程序化自动化处理 |
-| `--text` | boolean | `false` | 以纯文本格式输出结果，去除控制台颜色和特殊 UI 符号，生成结构清晰的文字摘要，专为 LLM / AI Agent 优化消费 |
+| 参数/选项 | 类型 | 是否必填 | 默认值 / 省略时行为 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| `--type <type>` | string | 否 | `all` | 过滤分组归属：`holding`（持仓分组）、`watchlist`（自选分组）、`all`（默认） |
+| `--with-members` | flag | 否 | `false` | 在输出中展开列示各分组所包含的全部详细成员基金，同时展示基金代码与完整名称 |
+| `--json` | boolean | 否 | `false` | 以结构化 JSON 格式输出结果，同时禁用所有交互式 UI 动画与引导文字，适用于 jq、管道操作及程序化自动化处理 |
+| `--text` | boolean | 否 | `false` | 以纯文本格式输出结果，去除控制台颜色和特殊 UI 符号，生成结构清晰的文字摘要，专为 LLM / AI Agent 优化消费 |
 
 #### 使用示例 (Examples)
 ```bash
@@ -401,12 +404,12 @@ jgb tag list [keyword] [--with-members] [--json] [--text]
 查看账户中所有自定义标签（含名称、颜色主题及关联基金数量）。支持传入关键词按标签名称进行模糊搜索，快速定位目标标签。传入 `--with-members` 可在输出中展开各标签的全部关联成员基金，同时展示基金代码与完整名称。
 
 #### 参数与选项 (Arguments & Options)
-| 参数/选项 | 类型 | 是否必填 | 说明 |
-| :--- | :--- | :--- | :--- |
-| `[keyword]` | string | 否 | 按标签名称模糊搜索的关键词，不传则列出全部标签 |
-| `--with-members` | flag | 否 | 在输出中展开列示各标签所包含的全部关联成员基金，同时展示基金代码与完整名称 |
-| `--json` | boolean | `false` | 以结构化 JSON 格式输出结果，同时禁用所有交互式 UI 动画与引导文字，适用于 jq、管道操作及程序化自动化处理 |
-| `--text` | boolean | `false` | 以纯文本格式输出结果，去除控制台颜色和特殊 UI 符号，生成结构清晰的文字摘要，专为 LLM / AI Agent 优化消费 |
+| 参数/选项 | 类型 | 是否必填 | 默认值 / 省略时行为 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| `[keyword]` | string | 否 | 不筛选，列出全部标签 | 按标签名称模糊搜索的关键词，不传则列出全部标签 |
+| `--with-members` | flag | 否 | `false` | 在输出中展开列示各标签所包含的全部关联成员基金，同时展示基金代码与完整名称 |
+| `--json` | boolean | 否 | `false` | 以结构化 JSON 格式输出结果，同时禁用所有交互式 UI 动画与引导文字，适用于 jq、管道操作及程序化自动化处理 |
+| `--text` | boolean | 否 | `false` | 以纯文本格式输出结果，去除控制台颜色和特殊 UI 符号，生成结构清晰的文字摘要，专为 LLM / AI Agent 优化消费 |
 
 #### 使用示例 (Examples)
 ```bash
@@ -503,12 +506,12 @@ jgb transactions <code> [--group <group>] [--json] [--text]
 列出指定基金的历史交易记录，展示每笔交易的类型、发生金额、成交份额、成交价格及交易日期等关键信息。支持传入分组 ID 或唯一分组名称，按分组筛选指定基金的交易记录。
 
 #### 参数与选项 (Arguments & Options)
-| 参数/选项 | 类型 | 是否必填 | 说明 |
-| :--- | :--- | :--- | :--- |
-| `<code>` | string | 是 | 基金代码，指定要查询交易记录的基金 |
-| `--group <group>` | string | 否 | 按分组 ID 或唯一分组名称筛选交易记录 |
-| `--json` | boolean | `false` | 以结构化 JSON 格式输出结果，同时禁用所有交互式 UI 动画与引导文字，适用于 jq、管道操作及程序化自动化处理 |
-| `--text` | boolean | `false` | 以纯文本格式输出结果，去除控制台颜色和特殊 UI 符号，生成结构清晰的文字摘要，专为 LLM / AI Agent 优化消费 |
+| 参数/选项 | 类型 | 是否必填 | 默认值 / 省略时行为 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| `<code>` | string | 是 | —（必填） | 基金代码，指定要查询交易记录的基金 |
+| `--group <group>` | string | 否 | 不限定分组；查询全部账本 | 按分组 ID 或唯一分组名称筛选交易记录 |
+| `--json` | boolean | 否 | `false` | 以结构化 JSON 格式输出结果，同时禁用所有交互式 UI 动画与引导文字，适用于 jq、管道操作及程序化自动化处理 |
+| `--text` | boolean | 否 | `false` | 以纯文本格式输出结果，去除控制台颜色和特殊 UI 符号，生成结构清晰的文字摘要，专为 LLM / AI Agent 优化消费 |
 
 #### 使用示例 (Examples)
 ```bash
@@ -578,11 +581,11 @@ jgb pending list [--code <code>] [--json] [--text]
 当交易提交时若最新净值尚未更新（如在非交易时段提交交易），该笔交易将自动进入待处理队列。本指令用于查询当前所有处于待处理状态的交易流水，待净值更新后系统会自动完成处理。支持按基金代码筛选指定基金的待处理交易。
 
 #### 参数与选项 (Arguments & Options)
-| 参数/选项 | 类型 | 是否必填 | 说明 |
-| :--- | :--- | :--- | :--- |
-| `--code <code>` | string | 否 | 按基金代码筛选待处理交易 |
-| `--json` | boolean | `false` | 以结构化 JSON 格式输出结果，同时禁用所有交互式 UI 动画与引导文字，适用于 jq、管道操作及程序化自动化处理 |
-| `--text` | boolean | `false` | 以纯文本格式输出结果，去除控制台颜色和特殊 UI 符号，生成结构清晰的文字摘要，专为 LLM / AI Agent 优化消费 |
+| 参数/选项 | 类型 | 是否必填 | 默认值 / 省略时行为 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| `--code <code>` | string | 否 | 不筛选，列出全部基金的待确认记录 | 按基金代码筛选待处理交易 |
+| `--json` | boolean | 否 | `false` | 以结构化 JSON 格式输出结果，同时禁用所有交互式 UI 动画与引导文字，适用于 jq、管道操作及程序化自动化处理 |
+| `--text` | boolean | 否 | `false` | 以纯文本格式输出结果，去除控制台颜色和特殊 UI 符号，生成结构清晰的文字摘要，专为 LLM / AI Agent 优化消费 |
 
 #### 使用示例 (Examples)
 ```bash
@@ -667,12 +670,12 @@ jgb dca list [options]
 查询当前账户所有已建立定投配置（Dollar-Cost Averaging, DCA）计划的概览状态，包括定投周期（按日/按周/按月）及对应扣款日、每期定额扣款金额、申购费率、起始扣款日期、计划所属分组（全局或指定分组）、以及计划当前是否处于运行状态。定投计划可挂载于全局（`__global__`）或某个自定义分组（`group_<id>`）之下，查询时支持按分组筛选。
 
 #### 参数与选项 (Arguments & Options)
-| 参数/选项 | 类型 | 是否必填 | 说明 |
-| :--- | :--- | :--- | :--- |
-| `--status <state>`| string| 否 | 过滤状态：`active`（运行中[默认]）、`paused`（已暂停）、`all`（全部） |
-| `--group <group>` | string | 否 | 分组 ID 或分组名称，仅查看指定分组下的定投计划；不传则汇总全部（含全局与各分组） |
-| `--json` | boolean | `false` | 以结构化 JSON 格式输出结果，同时禁用所有交互式 UI 动画与引导文字，适用于 jq、管道操作及程序化自动化处理 |
-| `--text` | boolean | `false` | 以纯文本格式输出结果，去除控制台颜色和特殊 UI 符号，生成结构清晰的文字摘要，专为 LLM / AI Agent 优化消费 |
+| 参数/选项 | 类型 | 是否必填 | 默认值 / 省略时行为 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| `--status <state>` | string | 否 | `active` | 过滤状态：`active`（运行中[默认]）、`paused`（已暂停）、`all`（全部） |
+| `--group <group>` | string | 否 | 不限定分组；查询全部账本 | 分组 ID 或分组名称，仅查看指定分组下的定投计划；不传则汇总全部（含全局与各分组） |
+| `--json` | boolean | 否 | `false` | 以结构化 JSON 格式输出结果，同时禁用所有交互式 UI 动画与引导文字，适用于 jq、管道操作及程序化自动化处理 |
+| `--text` | boolean | 否 | `false` | 以纯文本格式输出结果，去除控制台颜色和特殊 UI 符号，生成结构清晰的文字摘要，专为 LLM / AI Agent 优化消费 |
 
 #### 使用示例 (Examples)
 ```bash
@@ -776,13 +779,13 @@ jgb earnings [code] [options]
 查询指定基金或整个账户在历史日期范围内的每日浮动盈亏记录，展示日盈亏金额、日盈亏百分比及当日账户总资产快照，帮助用户清晰追踪特定日期市场波动对个人资金盘造成的绝对数额影响。支持传入基金代码查看单基金日盈亏，或查看全账户持仓汇总日盈亏；支持通过 `--days` 指定回溯交易日天数或通过 `--from` 明确指定起始追踪日期。
 
 #### 参数与选项 (Arguments & Options)
-| 参数/选项 | 类型 | 是否必填 | 说明 |
-| :--- | :--- | :--- | :--- |
-| `[code]` | string | 否 | 传对应基金代码则查看单基金日盈亏；不传或传 `all` 则看全账户持仓汇总日盈亏 |
-| `--days <num>`    | number| 否 | 查看最近的连续多少个交易日记录，默认值 `7` |
-| `--from <date>`   | string| 否 | 明确指定起始追踪日期 |
-| `--json` | boolean | `false` | 以结构化 JSON 格式输出结果，同时禁用所有交互式 UI 动画与引导文字，适用于 jq、管道操作及程序化自动化处理 |
-| `--text` | boolean | `false` | 以纯文本格式输出结果，去除控制台颜色和特殊 UI 符号，生成结构清晰的文字摘要，专为 LLM / AI Agent 优化消费 |
+| 参数/选项 | 类型 | 是否必填 | 默认值 / 省略时行为 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| `[code]` | string | 否 | `all`（全账户持仓汇总） | 传对应基金代码则查看单基金日盈亏；不传或传 `all` 则看全账户持仓汇总日盈亏 |
+| `--days <num>` | number | 否 | `7` 个交易日 | 查看最近的连续多少个交易日记录，默认值 `7` |
+| `--from <date>` | string | 否 | 不指定起始日期，按 `--days` 回溯 | 明确指定起始追踪日期 |
+| `--json` | boolean | 否 | `false` | 以结构化 JSON 格式输出结果，同时禁用所有交互式 UI 动画与引导文字，适用于 jq、管道操作及程序化自动化处理 |
+| `--text` | boolean | 否 | `false` | 以纯文本格式输出结果，去除控制台颜色和特殊 UI 符号，生成结构清晰的文字摘要，专为 LLM / AI Agent 优化消费 |
 
 #### 使用示例 (Examples)
 ```bash

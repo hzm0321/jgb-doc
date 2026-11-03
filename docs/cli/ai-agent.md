@@ -1,12 +1,19 @@
 ---
-sidebar_position: 5
+sidebar_position: 7
 title: AI Agent 与脚本集成指南
-sidebar_label: 5. AI Agent 集成
+sidebar_label: 7. 智能体集成
 ---
 
 # AI Agent 与脚本集成指南
 
 `@jigubao/cli` 在架构设计之初就将 **“机器可读性”** 与 **“AI Agent 友好性”** 提升至第一优先级的公民地位。为了让诸如 OpenClaw、AutoGPT、LangChain、以及各类自动化 Shell 管道能够以零幻觉、零猜测的高可靠性交互解析数据，CLI 提供了一整套标准化集成接口与输出协议。
+
+
+## v2 写入协议
+
+写操作先用 `--dry-run --json` 核对，再通过 `--yes --json` 提交。`--yes` 不授权设备接管；明确需要切换设备时增加 `--takeover`。`DEVICE_CONFLICT` 与 `DATA_CONFLICT` 的退出码均为 `6`，但数据冲突必须重新同步和核对。`COMMIT_UNKNOWN` 不可自动重试，应先查询云端结果。
+
+通过 `jgb describe --command "trade buy" --json` 或 `--schema` 发现写命令。完整流程见[写操作](./operations)和[设备同步](./sync)。
 
 ---
 
@@ -135,10 +142,10 @@ jgb describe [options]
 让当前运行的 CLI 生成关于自身所有命令树格式、参数定义、以及输入输出 JSON Schema 的完整元数据清单。大模型通过先读取该命令的输出，即可动态掌握全套最新的 CLI API 协议并实现准确无误的参数组装。
 
 #### 参数与选项 (Arguments & Options)
-| 参数/选项 | 类型 | 是否必填 | 说明 |
-| :--- | :--- | :--- | :--- |
-| `--command <cmd>` | string | 否 | 仅输出某个特定指令（如 `jgb info`）的参数描述文档与使用细则 |
-| `--schema` | flag | 否 | 将描述内容转换为符合标准的 OpenAPI / JSON Schema 定义格式 |
+| 参数/选项 | 类型 | 是否必填 | 默认值 / 省略时行为 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| `--command <cmd>` | string | 否 | 不限定命令，展示全部命令元数据 | 仅输出某个特定指令（如 `jgb info`）的参数描述文档与使用细则 |
+| `--schema` | flag | 否 | `false` | 将描述内容转换为符合标准的 OpenAPI / JSON Schema 定义格式 |
 
 #### 使用示例 (Examples)
 ```bash
@@ -188,10 +195,10 @@ jgb doctor [options]
 执行一键式的全方位自动化健康排查。系统将按顺序验证 Node.js 运行时兼容性、配置目录读写权限、本地缓存 SQLite 数据库完整性、当前账号的会员身份与到期状态、以及与天天基金、新浪财经、Supabase 云端 API 等外部依赖服务的连通延迟。
 
 #### 参数与选项 (Arguments & Options)
-| 参数/选项 | 类型 | 是否必填 | 说明 |
-| :--- | :--- | :--- | :--- |
-| `--json` | flag | 否 | 以 JSON 结构化报告形式返回自检结果，适合 CI/CD 流程检查 |
-| `--fix`  | flag | 否 | 尝试自动修复发现的非致命性本地问题（如重建损坏的轻量数据库索引） |
+| 参数/选项 | 类型 | 是否必填 | 默认值 / 省略时行为 | 说明 |
+| :--- | :--- | :--- | :--- | :--- |
+| `--json` | flag | 否 | `false` | 以 JSON 结构化报告形式返回自检结果，适合 CI/CD 流程检查 |
+| `--fix` | flag | 否 | `false` | 尝试自动修复发现的非致命性本地问题（如重建损坏的轻量数据库索引） |
 
 #### 使用示例 (Examples)
 ```bash
