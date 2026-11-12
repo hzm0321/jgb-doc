@@ -17,6 +17,9 @@ import Particles from '../components/ReactBits/Particles';
 import TiltCard from '../components/ReactBits/TiltCard';
 import AnimatedCounter from '../components/ReactBits/AnimatedCounter';
 
+/* 安卓安装包下载链接（替换为实际 APK 地址即可） */
+const ANDROID_DOWNLOAD_URL = 'https://mouvsqlmgymsaxikvqsh.supabase.co/storage/v1/object/public/app-releases/android/jigubao-3.3.0-release.apk?download=jigubao-3.3.0-release.apk';
+
 /* 滚动显示组件 (Reveal Animation) */
 function Reveal({ children, delay = 0, className = '' }: { children: ReactNode, delay?: number, className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -201,6 +204,38 @@ function CheckIcon() {
   );
 }
 
+function DownloadIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+      <polyline points="7 10 12 15 17 10" />
+      <line x1="12" y1="15" x2="12" y2="3" />
+    </svg>
+  );
+}
+
+function AndroidIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M5 16V10a7 7 0 0 1 14 0v6a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2Z" />
+      <path d="m8 3 1.5 2.5" />
+      <path d="m16 3-1.5 2.5" />
+      <circle cx="9.5" cy="10.5" r="0.8" fill="currentColor" />
+      <circle cx="14.5" cy="10.5" r="0.8" fill="currentColor" />
+      <path d="M9 18v3" />
+      <path d="M15 18v3" />
+    </svg>
+  );
+}
+
+function AppleIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.96 6.33c.67-.81 1.12-1.94 1-3.08-.96.04-2.13.64-2.82 1.45-.61.7-.115 1.85-.99 2.97 1.08.08 2.14-.53 2.81-1.34Z" />
+    </svg>
+  );
+}
+
 const cliFeatureItems = [
   {
     icon: <TerminalIcon />,
@@ -332,6 +367,11 @@ function HeroSection() {
             className={styles.starBtnWrapper}>
             <ExternalLinkIcon /> 在线体验
           </StarBorder>
+          <a
+            className={styles.heroBtnSecondary}
+            href="#mobile-download">
+            <DownloadIcon /> 移动端下载
+          </a>
           <Link
             className={styles.heroBtnSecondary}
             to="/docs/help">
@@ -416,6 +456,93 @@ function FeaturesSection() {
               </SpotlightCard>
             </Reveal>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function MobileDownloadSection() {
+  return (
+    <section id="mobile-download" className={styles.mobileSection}>
+      <div className="container">
+        <Reveal>
+          <Heading as="h2" className={styles.featuresSectionTitle}>
+            <ShinyText speed={4}>移动端下载</ShinyText>
+          </Heading>
+          <p className={styles.featuresSectionDesc}>
+            掌上实时追踪基金估值与重仓动态，云端账号多设备无缝同步
+          </p>
+        </Reveal>
+
+        <div className={styles.mobileDownloadGrid}>
+          <Reveal delay={100}>
+            <SpotlightCard
+              className={styles.mobileCard}
+              spotlightColor="rgba(52, 211, 153, 0.22)"
+              spotlightSize={380}>
+              <div className={styles.mobileCardHeader}>
+                <div className={clsx(styles.featureIcon, styles.featureIconGreen, styles.mobilePlatformIcon)}>
+                  <AndroidIcon />
+                </div>
+                <span className={clsx(styles.platformBadge, styles.platformBadgeReady)}>
+                  <span className={styles.statusDotReady} /> 已支持
+                </span>
+              </div>
+              <Heading as="h3" className={styles.mobileCardTitle}>
+                Android 客户端
+              </Heading>
+              <p className={styles.mobileCardDesc}>
+                原生级流畅体验，完整支持盘中实时估值、重仓股追踪、收益日历与多分组持仓管理，随时随地掌握行情脉搏。
+              </p>
+              <div className={styles.mobileMetaTags}>
+                <span className={styles.mobileMetaTag}>Android 8.0+</span>
+                <span className={styles.mobileMetaTag}>APK 直装</span>
+                <span className={styles.mobileMetaTag}>云端同步</span>
+              </div>
+              <div className={styles.mobileCardActions}>
+                <StarBorder
+                  as="a"
+                  href={ANDROID_DOWNLOAD_URL}
+                  color="#34d399"
+                  speed="4s"
+                  className={styles.mobileDownloadStarBtn}>
+                  <DownloadIcon /> 下载安卓版 (.apk)
+                </StarBorder>
+              </div>
+            </SpotlightCard>
+          </Reveal>
+
+          <Reveal delay={200}>
+            <SpotlightCard
+              className={styles.mobileCard}
+              spotlightColor="rgba(96, 165, 250, 0.18)"
+              spotlightSize={380}>
+              <div className={styles.mobileCardHeader}>
+                <div className={clsx(styles.featureIcon, styles.featureIconBlue, styles.mobilePlatformIcon)}>
+                  <AppleIcon />
+                </div>
+                <span className={clsx(styles.platformBadge, styles.platformBadgeDev)}>
+                  <span className={styles.statusDotDev} /> 开发中
+                </span>
+              </div>
+              <Heading as="h3" className={styles.mobileCardTitle}>
+                iOS 客户端
+              </Heading>
+              <p className={styles.mobileCardDesc}>
+                iOS 原生版本正在持续推进开发与适配中。现阶段可使用 Safari 打开网页版并「添加到主屏幕」，体验媲美原生的 PWA 应用。
+              </p>
+              <div className={styles.mobileMetaTags}>
+                <span className={styles.mobileMetaTag}>iPhone / iPad</span>
+                <span className={styles.mobileMetaTag}>现支持 PWA 桌面图标</span>
+              </div>
+              <div className={styles.mobileCardActions}>
+                <span className={styles.mobileBtnDisabled} aria-disabled="true">
+                  <AppleIcon /> iOS 版开发中 · 敬请期待
+                </span>
+              </div>
+            </SpotlightCard>
+          </Reveal>
         </div>
       </div>
     </section>
@@ -614,6 +741,7 @@ export default function Home(): ReactNode {
       <main>
         <ScreenshotSection />
         <FeaturesSection />
+        <MobileDownloadSection />
         <CliSection />
         <TechStackSection />
       </main>

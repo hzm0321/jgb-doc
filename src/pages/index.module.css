@@ -969,3 +969,170 @@
   }
 }
 
+/* ==================== 移动端下载板块 ==================== */
+.mobileSection {
+  padding: 4rem 0 5rem;
+  scroll-margin-top: 4rem;
+}
+
+.mobileDownloadGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.mobileCard {
+  height: 100%;
+}
+
+.mobileCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.mobilePlatformIcon {
+  margin-bottom: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+}
+
+.platformBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.platformBadgeReady {
+  background: rgba(52, 211, 153, 0.12);
+  color: #34d399;
+  border: 1px solid rgba(52, 211, 153, 0.28);
+}
+
+.platformBadgeDev {
+  background: rgba(96, 165, 250, 0.12);
+  color: #60a5fa;
+  border: 1px solid rgba(96, 165, 250, 0.25);
+}
+
+[data-theme='light'] .platformBadgeReady {
+  background: rgba(5, 150, 105, 0.1);
+  color: #059669;
+  border-color: rgba(5, 150, 105, 0.25);
+}
+
+[data-theme='light'] .platformBadgeDev {
+  background: rgba(37, 99, 235, 0.08);
+  color: #2563eb;
+  border-color: rgba(37, 99, 235, 0.2);
+}
+
+.statusDotReady,
+.statusDotDev {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.statusDotReady {
+  background: #34d399;
+  box-shadow: 0 0 8px rgba(52, 211, 153, 0.8);
+}
+
+.statusDotDev {
+  background: #60a5fa;
+  opacity: 0.85;
+}
+
+[data-theme='light'] .statusDotReady {
+  background: #059669;
+}
+
+[data-theme='light'] .statusDotDev {
+  background: #2563eb;
+}
+
+.mobileCardTitle {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+  color: var(--jgb-text);
+}
+
+.mobileCardDesc {
+  font-size: 0.94rem;
+  line-height: 1.65;
+  color: var(--jgb-muted);
+  margin-bottom: 1.25rem;
+}
+
+.mobileMetaTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.75rem;
+}
+
+.mobileMetaTag {
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--jgb-muted);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+[data-theme='light'] .mobileMetaTag {
+  background: rgba(15, 23, 42, 0.04);
+  border-color: rgba(15, 23, 42, 0.08);
+}
+
+.mobileCardActions {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+}
+
+.mobileDownloadStarBtn {
+  width: 100%;
+  justify-content: center;
+}
+
+.mobileBtnDisabled {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 13px 24px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--jgb-muted);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  cursor: not-allowed;
+  user-select: none;
+}
+
+[data-theme='light'] .mobileBtnDisabled {
+  background: rgba(15, 23, 42, 0.03);
+  border-color: rgba(15, 23, 42, 0.15);
+}
+
+@media screen and (max-width: 768px) {
+  .mobileDownloadGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
