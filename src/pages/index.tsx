@@ -17,8 +17,8 @@ import Particles from '../components/ReactBits/Particles';
 import TiltCard from '../components/ReactBits/TiltCard';
 import AnimatedCounter from '../components/ReactBits/AnimatedCounter';
 
-/* 安卓安装包下载链接（替换为实际 APK 地址即可） */
-const ANDROID_DOWNLOAD_URL = 'https://mouvsqlmgymsaxikvqsh.supabase.co/storage/v1/object/public/app-releases/android/jigubao-3.3.0-release.apk?download=jigubao-3.3.0-release.apk';
+/* 安卓最新版固定下载入口，发布新版本时无需修改此地址。 */
+const ANDROID_DOWNLOAD_URL = 'https://jigubao.app/download/android';
 
 /* 滚动显示组件 (Reveal Animation) */
 function Reveal({ children, delay = 0, className = '' }: { children: ReactNode, delay?: number, className?: string }) {
