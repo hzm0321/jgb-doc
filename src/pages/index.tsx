@@ -1,4 +1,4 @@
-import React, {ReactNode, useEffect, useRef, useState, useCallback} from 'react';
+import React, {ReactNode, useEffect, useId, useRef, useState, useCallback} from 'react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
@@ -19,6 +19,7 @@ import AnimatedCounter from '../components/ReactBits/AnimatedCounter';
 
 /* 安卓最新版固定下载入口，发布新版本时无需修改此地址。 */
 const ANDROID_DOWNLOAD_URL = 'https://jigubao.app/download/android';
+const ANDROID_PAN_DOWNLOAD_URL = 'https://pan.baidu.com/s/1l2p2nbnnFEnjUZz7LqPZmg?pwd=p87x';
 
 /* 滚动显示组件 (Reveal Animation) */
 function Reveal({ children, delay = 0, className = '' }: { children: ReactNode, delay?: number, className?: string }) {
@@ -232,6 +233,43 @@ function AppleIcon() {
   return (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
       <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.96 6.33c.67-.81 1.12-1.94 1-3.08-.96.04-2.13.64-2.82 1.45-.61.7-.115 1.85-.99 2.97 1.08.08 2.14-.53 2.81-1.34Z" />
+    </svg>
+  );
+}
+
+function ChevronDownIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={className}>
+      <polyline points="6 9 12 15 18 9" />
+    </svg>
+  );
+}
+
+function ArrowRightIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={className}>
+      <path d="M5 12h14" />
+      <path d="m12 5 7 7-7 7" />
     </svg>
   );
 }
@@ -463,6 +501,93 @@ function FeaturesSection() {
 }
 
 function MobileDownloadSection() {
+  const popoverRef = useRef<HTMLDivElement>(null);
+  const closeTimerRef = useRef<number | null>(null);
+  const popoverId = useId();
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+
+  const cancelScheduledClose = useCallback(() => {
+    if (closeTimerRef.current !== null) {
+      window.clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+  }, []);
+
+  const openPopover = useCallback(() => {
+    cancelScheduledClose();
+    const popover = popoverRef.current;
+    if (!popover || typeof popover.showPopover !== 'function') return;
+    if (!popover.matches(':popover-open')) {
+      try {
+        popover.showPopover();
+      } catch {
+        // Ignore concurrent popover state transitions
+      }
+    }
+  }, [cancelScheduledClose]);
+
+  const closePopover = useCallback(() => {
+    cancelScheduledClose();
+    const popover = popoverRef.current;
+    if (!popover || typeof popover.hidePopover !== 'function') return;
+    if (popover.matches(':popover-open')) {
+      try {
+        popover.hidePopover();
+      } catch {
+        // Ignore if already hidden
+      }
+    }
+  }, [cancelScheduledClose]);
+
+  const scheduleClose = useCallback(() => {
+    cancelScheduledClose();
+    closeTimerRef.current = window.setTimeout(() => {
+      closeTimerRef.current = null;
+      const popover = popoverRef.current;
+      if (popover && popover.contains(document.activeElement)) return;
+      closePopover();
+    }, 180);
+  }, [cancelScheduledClose, closePopover]);
+
+  useEffect(() => {
+    const popover = popoverRef.current;
+    if (!popover) return;
+    const handleToggle = (e: Event) => {
+      const toggleEvent = e as ToggleEvent;
+      setIsPopoverOpen(toggleEvent.newState === 'open');
+    };
+    popover.addEventListener('toggle', handleToggle);
+    return () => {
+      popover.removeEventListener('toggle', handleToggle);
+      cancelScheduledClose();
+    };
+  }, [cancelScheduledClose]);
+
+  const handlePointerEnter = useCallback(
+    (e: React.PointerEvent) => {
+      if (e.pointerType === 'touch') return;
+      openPopover();
+    },
+    [openPopover]
+  );
+
+  const handlePointerLeave = useCallback(
+    (e: React.PointerEvent) => {
+      if (e.pointerType === 'touch') return;
+      scheduleClose();
+    },
+    [scheduleClose]
+  );
+
+  const handleContainerBlur = useCallback(
+    (e: React.FocusEvent<HTMLDivElement>) => {
+      if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
+        closePopover();
+      }
+    },
+    [closePopover]
+  );
+
   return (
     <section id="mobile-download" className={styles.mobileSection}>
       <div className="container">
@@ -500,15 +625,70 @@ function MobileDownloadSection() {
                 <span className={styles.mobileMetaTag}>APK 直装</span>
                 <span className={styles.mobileMetaTag}>云端同步</span>
               </div>
-              <div className={styles.mobileCardActions}>
+              <div
+                className={styles.mobileCardActions}
+                onBlur={handleContainerBlur}>
                 <StarBorder
-                  as="a"
-                  href={ANDROID_DOWNLOAD_URL}
+                  as="button"
+                  type="button"
+                  popoverTarget={popoverId}
+                  popoverTargetAction="show"
+                  aria-expanded={isPopoverOpen}
+                  aria-controls={popoverId}
+                  onPointerEnter={handlePointerEnter}
+                  onPointerLeave={handlePointerLeave}
                   color="#34d399"
                   speed="4s"
                   className={styles.mobileDownloadStarBtn}>
-                  <DownloadIcon /> 下载安卓版 (.apk)
+                  <DownloadIcon />
+                  <span>下载安卓版 (.apk)</span>
+                  <ChevronDownIcon
+                    className={clsx(
+                      styles.downloadChevron,
+                      isPopoverOpen && styles.downloadChevronOpen
+                    )}
+                  />
                 </StarBorder>
+
+                <div
+                  ref={popoverRef}
+                  id={popoverId}
+                  popover="auto"
+                  className={styles.downloadPopover}
+                  onPointerEnter={handlePointerEnter}
+                  onPointerLeave={handlePointerLeave}>
+                  <div className={styles.downloadPopoverList}>
+                    <a
+                      href={ANDROID_DOWNLOAD_URL}
+                      className={clsx(styles.downloadOption, styles.downloadOptionPrimary)}>
+                      <span className={clsx(styles.downloadOptionIcon, styles.downloadOptionIconPrimary)}>
+                        <DownloadIcon />
+                      </span>
+                      <span className={styles.downloadOptionText}>
+                        <span className={styles.downloadOptionTitle}>直接下载</span>
+                        <span className={styles.downloadOptionDesc}>官方直链 · APK 安装包</span>
+                      </span>
+                      <ArrowRightIcon className={styles.downloadOptionArrow} />
+                    </a>
+
+                    <a
+                      href={ANDROID_PAN_DOWNLOAD_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={clsx(styles.downloadOption, styles.downloadOptionSecondary)}>
+                      <span className={clsx(styles.downloadOptionIcon, styles.downloadOptionIconSecondary)}>
+                        <CloudIcon />
+                      </span>
+                      <span className={styles.downloadOptionText}>
+                        <span className={styles.downloadOptionTitle}>网盘下载</span>
+                        <span className={styles.downloadOptionDesc}>百度网盘高速备用通道</span>
+                      </span>
+                      <span className={styles.downloadOptionArrow}>
+                        <ExternalLinkIcon />
+                      </span>
+                    </a>
+                  </div>
+                </div>
               </div>
             </SpotlightCard>
           </Reveal>

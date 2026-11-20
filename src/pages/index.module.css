@@ -1106,6 +1106,32 @@
 .mobileDownloadStarBtn {
   width: 100%;
   justify-content: center;
+  border: none;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+}
+
+.mobileDownloadStarBtn:hover,
+.mobileDownloadStarBtn[aria-expanded='true'] {
+  transform: none;
+  box-shadow: 0 10px 30px rgba(52, 211, 153, 0.3);
+}
+
+.mobileDownloadStarBtn:focus-visible {
+  outline: 2px solid var(--jgb-primary);
+  outline-offset: 3px;
+}
+
+.downloadChevron {
+  margin-left: 2px;
+  opacity: 0.75;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+}
+
+.downloadChevronOpen {
+  transform: rotate(180deg);
+  opacity: 1;
 }
 
 .mobileBtnDisabled {
@@ -1134,5 +1160,232 @@
   .mobileDownloadGrid {
     grid-template-columns: 1fr;
   }
+}
+
+/* ==================== 安卓下载悬浮框 ==================== */
+.downloadPopover {
+  padding: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 16px;
+  width: min(360px, calc(100vw - 2rem));
+  max-width: calc(100vw - 2rem);
+  background: rgba(15, 23, 42, 0.94);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  color: var(--jgb-text);
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(52, 211, 153, 0.12);
+  opacity: 0;
+  overflow: visible;
+}
+
+.downloadPopover:is(:popover-open, .\:popover-open) {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@starting-style {
+  .downloadPopover:popover-open {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .downloadPopover {
+    transition-property: opacity, transform, display, overlay;
+    transition-duration: 0.2s;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    transition-behavior: allow-discrete;
+  }
+}
+
+@supports (position-area: block-end) {
+  .mobileDownloadStarBtn {
+    anchor-name: --android-download-trigger;
+  }
+
+  .downloadPopover {
+    position-anchor: --android-download-trigger;
+    inset: auto;
+    margin: 0;
+    margin-block: 10px;
+    position-area: block-end;
+    position-try-fallbacks: flip-block;
+    width: anchor-size(width);
+    min-width: 260px;
+  }
+}
+
+@supports not (position-area: block-end) {
+  .downloadPopover::backdrop {
+    background: rgba(2, 6, 23, 0.45);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  [data-theme='light'] .downloadPopover::backdrop {
+    background: rgba(15, 23, 42, 0.3);
+  }
+}
+
+.downloadPopoverList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.downloadOption {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 0.8rem;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.03);
+  color: #f8fafc;
+  text-decoration: none !important;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.downloadOptionPrimary:hover {
+  background: rgba(52, 211, 153, 0.12);
+  border-color: rgba(52, 211, 153, 0.35);
+  color: #f8fafc;
+}
+
+.downloadOptionSecondary:hover {
+  background: rgba(34, 211, 238, 0.1);
+  border-color: rgba(34, 211, 238, 0.35);
+  color: #f8fafc;
+}
+
+.downloadOption:focus-visible {
+  outline: 2px solid var(--jgb-primary);
+  outline-offset: -2px;
+}
+
+.downloadOptionIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.downloadOptionIcon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.downloadOptionIconPrimary {
+  background: rgba(52, 211, 153, 0.14);
+  color: #34d399;
+}
+
+.downloadOptionIconSecondary {
+  background: rgba(34, 211, 238, 0.14);
+  color: #22d3ee;
+}
+
+.downloadOptionText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.downloadOptionTitle {
+  font-size: 0.94rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #f8fafc;
+}
+
+.downloadOptionDesc {
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: #94a3b8;
+}
+
+.downloadOptionArrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.downloadOptionPrimary:hover .downloadOptionArrow {
+  color: #34d399;
+  transform: translateX(2px);
+}
+
+.downloadOptionSecondary:hover .downloadOptionArrow {
+  color: #22d3ee;
+  transform: translateX(2px);
+}
+
+[data-theme='light'] .downloadPopover {
+  background: rgba(255, 255, 255, 0.96);
+  border-color: #e2e8f0;
+  color: #0f172a;
+  box-shadow:
+    0 18px 45px rgba(15, 23, 42, 0.14),
+    0 2px 8px rgba(15, 23, 42, 0.06);
+}
+
+[data-theme='light'] .downloadOption {
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+[data-theme='light'] .downloadOptionPrimary:hover {
+  background: #ecfdf5;
+  border-color: rgba(5, 150, 105, 0.32);
+  color: #0f172a;
+}
+
+[data-theme='light'] .downloadOptionSecondary:hover {
+  background: #f0f9ff;
+  border-color: rgba(8, 145, 178, 0.32);
+  color: #0f172a;
+}
+
+[data-theme='light'] .downloadOptionIconPrimary {
+  background: rgba(5, 150, 105, 0.12);
+  color: #059669;
+}
+
+[data-theme='light'] .downloadOptionIconSecondary {
+  background: rgba(8, 145, 178, 0.12);
+  color: #0891b2;
+}
+
+[data-theme='light'] .downloadOptionTitle {
+  color: #0f172a;
+}
+
+[data-theme='light'] .downloadOptionDesc {
+  color: #475569;
+}
+
+[data-theme='light'] .downloadOptionArrow {
+  color: #64748b;
+}
+
+[data-theme='light'] .downloadOptionPrimary:hover .downloadOptionArrow {
+  color: #059669;
+}
+
+[data-theme='light'] .downloadOptionSecondary:hover .downloadOptionArrow {
+  color: #0891b2;
 }
 
