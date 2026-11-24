@@ -17,9 +17,10 @@ import Particles from '../components/ReactBits/Particles';
 import TiltCard from '../components/ReactBits/TiltCard';
 import AnimatedCounter from '../components/ReactBits/AnimatedCounter';
 
-/* 安卓最新版固定下载入口，发布新版本时无需修改此地址。 */
+/* 移动端客户端固定下载入口，发布新版本时无需修改此地址。 */
 const ANDROID_DOWNLOAD_URL = 'https://jigubao.app/download/android';
 const ANDROID_PAN_DOWNLOAD_URL = 'https://pan.baidu.com/s/1l2p2nbnnFEnjUZz7LqPZmg?pwd=p87x';
+const IOS_TESTFLIGHT_URL = 'https://testflight.apple.com/join/udRTkp4E';
 
 /* 滚动显示组件 (Reveal Animation) */
 function Reveal({ children, delay = 0, className = '' }: { children: ReactNode, delay?: number, className?: string }) {
@@ -500,7 +501,19 @@ function FeaturesSection() {
   );
 }
 
-function MobileDownloadSection() {
+function DownloadPopoverButton({
+  label,
+  color,
+  triggerClassName,
+  popoverClassName,
+  children,
+}: {
+  label: string;
+  color: string;
+  triggerClassName: string;
+  popoverClassName: string;
+  children: ReactNode;
+}) {
   const popoverRef = useRef<HTMLDivElement>(null);
   const closeTimerRef = useRef<number | null>(null);
   const popoverId = useId();
@@ -589,6 +602,44 @@ function MobileDownloadSection() {
   );
 
   return (
+    <div className={styles.mobileCardActions} onBlur={handleContainerBlur}>
+      <StarBorder
+        as="button"
+        type="button"
+        popoverTarget={popoverId}
+        popoverTargetAction="show"
+        aria-expanded={isPopoverOpen}
+        aria-controls={popoverId}
+        onPointerEnter={handlePointerEnter}
+        onPointerLeave={handlePointerLeave}
+        color={color}
+        speed="4s"
+        className={clsx(styles.mobileDownloadStarBtn, triggerClassName)}>
+        <DownloadIcon />
+        <span>{label}</span>
+        <ChevronDownIcon
+          className={clsx(
+            styles.downloadChevron,
+            isPopoverOpen && styles.downloadChevronOpen
+          )}
+        />
+      </StarBorder>
+
+      <div
+        ref={popoverRef}
+        id={popoverId}
+        popover="auto"
+        className={clsx(styles.downloadPopover, popoverClassName)}
+        onPointerEnter={handlePointerEnter}
+        onPointerLeave={handlePointerLeave}>
+        <div className={styles.downloadPopoverList}>{children}</div>
+      </div>
+    </div>
+  );
+}
+
+function MobileDownloadSection() {
+  return (
     <section id="mobile-download" className={styles.mobileSection}>
       <div className="container">
         <Reveal>
@@ -625,102 +676,90 @@ function MobileDownloadSection() {
                 <span className={styles.mobileMetaTag}>APK 直装</span>
                 <span className={styles.mobileMetaTag}>云端同步</span>
               </div>
-              <div
-                className={styles.mobileCardActions}
-                onBlur={handleContainerBlur}>
-                <StarBorder
-                  as="button"
-                  type="button"
-                  popoverTarget={popoverId}
-                  popoverTargetAction="show"
-                  aria-expanded={isPopoverOpen}
-                  aria-controls={popoverId}
-                  onPointerEnter={handlePointerEnter}
-                  onPointerLeave={handlePointerLeave}
-                  color="#34d399"
-                  speed="4s"
-                  className={styles.mobileDownloadStarBtn}>
-                  <DownloadIcon />
-                  <span>下载安卓版 (.apk)</span>
-                  <ChevronDownIcon
-                    className={clsx(
-                      styles.downloadChevron,
-                      isPopoverOpen && styles.downloadChevronOpen
-                    )}
-                  />
-                </StarBorder>
+              <DownloadPopoverButton
+                label="下载安卓版 (.apk)"
+                color="#34d399"
+                triggerClassName={styles.androidDownloadTrigger}
+                popoverClassName={styles.androidDownloadPopover}>
+                <a
+                  href={ANDROID_DOWNLOAD_URL}
+                  className={clsx(styles.downloadOption, styles.downloadOptionPrimary)}>
+                  <span className={clsx(styles.downloadOptionIcon, styles.downloadOptionIconPrimary)}>
+                    <DownloadIcon />
+                  </span>
+                  <span className={styles.downloadOptionText}>
+                    <span className={styles.downloadOptionTitle}>直接下载</span>
+                    <span className={styles.downloadOptionDesc}>官方直链 · APK 安装包</span>
+                  </span>
+                  <ArrowRightIcon className={styles.downloadOptionArrow} />
+                </a>
 
-                <div
-                  ref={popoverRef}
-                  id={popoverId}
-                  popover="auto"
-                  className={styles.downloadPopover}
-                  onPointerEnter={handlePointerEnter}
-                  onPointerLeave={handlePointerLeave}>
-                  <div className={styles.downloadPopoverList}>
-                    <a
-                      href={ANDROID_DOWNLOAD_URL}
-                      className={clsx(styles.downloadOption, styles.downloadOptionPrimary)}>
-                      <span className={clsx(styles.downloadOptionIcon, styles.downloadOptionIconPrimary)}>
-                        <DownloadIcon />
-                      </span>
-                      <span className={styles.downloadOptionText}>
-                        <span className={styles.downloadOptionTitle}>直接下载</span>
-                        <span className={styles.downloadOptionDesc}>官方直链 · APK 安装包</span>
-                      </span>
-                      <ArrowRightIcon className={styles.downloadOptionArrow} />
-                    </a>
-
-                    <a
-                      href={ANDROID_PAN_DOWNLOAD_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={clsx(styles.downloadOption, styles.downloadOptionSecondary)}>
-                      <span className={clsx(styles.downloadOptionIcon, styles.downloadOptionIconSecondary)}>
-                        <CloudIcon />
-                      </span>
-                      <span className={styles.downloadOptionText}>
-                        <span className={styles.downloadOptionTitle}>网盘下载</span>
-                        <span className={styles.downloadOptionDesc}>百度网盘高速备用通道</span>
-                      </span>
-                      <span className={styles.downloadOptionArrow}>
-                        <ExternalLinkIcon />
-                      </span>
-                    </a>
-                  </div>
-                </div>
-              </div>
+                <a
+                  href={ANDROID_PAN_DOWNLOAD_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={clsx(styles.downloadOption, styles.downloadOptionSecondary)}>
+                  <span className={clsx(styles.downloadOptionIcon, styles.downloadOptionIconSecondary)}>
+                    <CloudIcon />
+                  </span>
+                  <span className={styles.downloadOptionText}>
+                    <span className={styles.downloadOptionTitle}>网盘下载</span>
+                    <span className={styles.downloadOptionDesc}>百度网盘高速备用通道</span>
+                  </span>
+                  <span className={styles.downloadOptionArrow}>
+                    <ExternalLinkIcon />
+                  </span>
+                </a>
+              </DownloadPopoverButton>
             </SpotlightCard>
           </Reveal>
 
           <Reveal delay={200}>
             <SpotlightCard
               className={styles.mobileCard}
-              spotlightColor="rgba(96, 165, 250, 0.18)"
+              spotlightColor="rgba(96, 165, 250, 0.22)"
               spotlightSize={380}>
               <div className={styles.mobileCardHeader}>
                 <div className={clsx(styles.featureIcon, styles.featureIconBlue, styles.mobilePlatformIcon)}>
                   <AppleIcon />
                 </div>
-                <span className={clsx(styles.platformBadge, styles.platformBadgeDev)}>
-                  <span className={styles.statusDotDev} /> 开发中
+                <span className={clsx(styles.platformBadge, styles.platformBadgeBeta)}>
+                  <span className={styles.statusDotBeta} /> 公测中
                 </span>
               </div>
               <Heading as="h3" className={styles.mobileCardTitle}>
                 iOS 客户端
               </Heading>
               <p className={styles.mobileCardDesc}>
-                iOS 原生版本正在持续推进开发与适配中。现阶段可使用 Safari 打开网页版并「添加到主屏幕」，体验媲美原生的 PWA 应用。
+                原生级流畅体验，现已通过 Apple TestFlight 开启公测，完整支持盘中实时估值、重仓股追踪、收益日历与多分组持仓管理。
               </p>
               <div className={styles.mobileMetaTags}>
                 <span className={styles.mobileMetaTag}>iPhone / iPad</span>
-                <span className={styles.mobileMetaTag}>现支持 PWA 桌面图标</span>
+                <span className={styles.mobileMetaTag}>TestFlight 公测</span>
+                <span className={styles.mobileMetaTag}>云端同步</span>
               </div>
-              <div className={styles.mobileCardActions}>
-                <span className={styles.mobileBtnDisabled} aria-disabled="true">
-                  <AppleIcon /> iOS 版开发中 · 敬请期待
-                </span>
-              </div>
+              <DownloadPopoverButton
+                label="下载 iOS 版 (公测)"
+                color="#60a5fa"
+                triggerClassName={styles.iosDownloadTrigger}
+                popoverClassName={styles.iosDownloadPopover}>
+                <a
+                  href={IOS_TESTFLIGHT_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={clsx(styles.downloadOption, styles.downloadOptionIos)}>
+                  <span className={clsx(styles.downloadOptionIcon, styles.downloadOptionIconIos)}>
+                    <AppleIcon />
+                  </span>
+                  <span className={styles.downloadOptionText}>
+                    <span className={styles.downloadOptionTitle}>TestFlight 公测版</span>
+                    <span className={styles.downloadOptionDesc}>Apple 官方公测通道 · 点击加入体验</span>
+                  </span>
+                  <span className={styles.downloadOptionArrow}>
+                    <ExternalLinkIcon />
+                  </span>
+                </a>
+              </DownloadPopoverButton>
             </SpotlightCard>
           </Reveal>
         </div>
