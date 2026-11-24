@@ -130,6 +130,10 @@ const config: Config = {
               label: '使用文档',
               to: '/docs/help',
             },
+            {
+              label: '隐私政策',
+              to: '/privacy',
+            },
           ],
         },
         {
